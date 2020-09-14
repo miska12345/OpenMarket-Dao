@@ -1,4 +1,4 @@
-package io.openmarket.transaction.dynamodb;
+package io.openmarket.transaction.dao.dynamodb;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -6,7 +6,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import com.google.common.collect.ImmutableMap;
-import io.openmarket.dao.dynamodb.AbstractDynamoDBDao;
+import io.openmarket.dynamodb.dao.dynamodb.AbstractDynamoDBDao;
 import io.openmarket.transaction.model.Transaction;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
@@ -20,6 +20,7 @@ import static io.openmarket.config.TransactionConfig.*;
 
 @Log4j2
 public class TransactionDaoImpl extends AbstractDynamoDBDao<Transaction> implements TransactionDao {
+    private static final String DDB_QUERY_VALUE = ":val";
     @Inject
     public TransactionDaoImpl(@NonNull final AmazonDynamoDB dbClient, @NonNull final DynamoDBMapper dbMapper) {
         super(dbClient, dbMapper);
@@ -48,8 +49,9 @@ public class TransactionDaoImpl extends AbstractDynamoDBDao<Transaction> impleme
         final QueryRequest request = new QueryRequest()
                 .withTableName(TRANSACTION_DDB_TABLE_NAME)
                 .withIndexName(TRANSACTION_DDB_INDEX_NAME)
-                .withExpressionAttributeValues(ImmutableMap.of(":val", new AttributeValue(payerId)))
-                .withKeyConditionExpression(String.format("%s = :val", TRANSACTION_DDB_ATTRIBUTE_PAYER_ID))
+                .withExpressionAttributeValues(ImmutableMap.of(DDB_QUERY_VALUE, new AttributeValue(payerId)))
+                .withKeyConditionExpression(String.format("%s = %s", TRANSACTION_DDB_ATTRIBUTE_PAYER_ID,
+                        DDB_QUERY_VALUE))
                 .withExclusiveStartKey(exclusiveStartKey);
         final QueryResult queryResult = getDbClient().query(request);
         queryResult.getItems().forEach(a -> output.add(load(a.get(TRANSACTION_DDB_ATTRIBUTE_ID).getS()).get()));

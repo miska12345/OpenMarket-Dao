@@ -1,4 +1,4 @@
-package io.openmarket.dao.dynamodb;
+package io.openmarket.dynamodb.dao.dynamodb;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;

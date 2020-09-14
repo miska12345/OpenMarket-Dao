@@ -1,7 +1,7 @@
-package io.openmarket.transaction.dynamodb;
+package io.openmarket.transaction.dao.dynamodb;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import io.openmarket.dao.dynamodb.DynamoDBDao;
+import io.openmarket.dynamodb.dao.dynamodb.DynamoDBDao;
 import io.openmarket.transaction.model.Transaction;
 
 import java.util.Collection;

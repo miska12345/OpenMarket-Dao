@@ -1,4 +1,4 @@
-package io.openmarket.dao.dynamodb;
+package io.openmarket.dynamodb.dao.dynamodb;
 
 import java.util.Optional;
 
