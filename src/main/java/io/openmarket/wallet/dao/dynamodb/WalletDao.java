@@ -1,6 +1,7 @@
 package io.openmarket.wallet.dao.dynamodb;
 
 import com.amazonaws.services.dynamodbv2.model.TransactWriteItem;
+import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
 import io.openmarket.dynamodb.dao.dynamodb.DynamoDBDao;
 import io.openmarket.wallet.model.Wallet;
 
@@ -15,4 +16,10 @@ public interface WalletDao extends DynamoDBDao<Wallet> {
      * @param items the items to use with transaction write.
      */
     void doTransactionWrite(Collection<TransactWriteItem> items);
+
+    /**
+     * update a Wallet entry with the given request.
+     * @param request the update request.
+     */
+    void update(UpdateItemRequest request);
 }

@@ -22,7 +22,4 @@ public class Wallet {
     @DynamoDBTypeConvertedEnum
     @DynamoDBAttribute(attributeName = WALLET_DDB_ATTRIBUTE_TYPE)
     private WalletType type;
-
-    @DynamoDBVersionAttribute
-    private Long version;
 }

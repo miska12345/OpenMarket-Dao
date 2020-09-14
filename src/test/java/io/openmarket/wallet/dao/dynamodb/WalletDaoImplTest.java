@@ -10,15 +10,16 @@ import io.openmarket.wallet.model.Wallet;
 import io.openmarket.wallet.model.WalletType;
 import org.junit.jupiter.api.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.openmarket.config.WalletConfig.WALLET_DDB_ATTRIBUTE_OWNER_ID;
-import static io.openmarket.config.WalletConfig.WALLET_DDB_TABLE_NAME;
+import static io.openmarket.config.WalletConfig.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WalletDaoImplTest {
     private static final String OWNER_ID = "123";
+    private static final String CURRENCY_ID = "666";
     private static AmazonDynamoDBLocal localDBClient;
     private AmazonDynamoDB dbClient;
     private DynamoDBMapper dbMapper;
@@ -102,6 +103,28 @@ public class WalletDaoImplTest {
                 )
         );
         assertThrows(TransactionCanceledException.class, () -> walletDao.doTransactionWrite(items));
+    }
+
+    @Test
+    public void test_Update() {
+        Wallet wallet = generateWallet();
+        wallet.getCoins().put(CURRENCY_ID, 0.0);
+        walletDao.save(wallet);
+
+        walletDao.update(new UpdateItemRequest().withTableName(WALLET_DDB_TABLE_NAME)
+                .withUpdateExpression("SET #cm.#coin = if_not_exists(#cm.#coin, :zero)")
+                .withExpressionAttributeNames(ImmutableMap.of("#cm", WALLET_DDB_ATTRIBUTE_COIN_MAP, "#coin",
+                        CURRENCY_ID))
+                .withExpressionAttributeValues(ImmutableMap.of(":zero", new AttributeValue().withN("0")))
+                .withKey(ImmutableMap.of(WALLET_DDB_ATTRIBUTE_OWNER_ID, new AttributeValue(OWNER_ID)))
+        );
+        wallet = walletDao.load(wallet.getOwnerId()).get();
+        assertEquals(0.0, wallet.getCoins().get(CURRENCY_ID));
+    }
+
+    private Wallet generateWallet() {
+        return Wallet.builder().ownerId(OWNER_ID).coins(new HashMap<>())
+                .type(WalletType.USER).build();
     }
 
     private static void createTable() {

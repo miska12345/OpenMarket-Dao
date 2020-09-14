@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.model.TransactWriteItem;
 import com.amazonaws.services.dynamodbv2.model.TransactWriteItemsRequest;
+import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
 import io.openmarket.dynamodb.dao.dynamodb.AbstractDynamoDBDao;
 import io.openmarket.wallet.model.Wallet;
 import lombok.NonNull;
@@ -31,5 +32,10 @@ public class WalletDaoImpl extends AbstractDynamoDBDao<Wallet> implements Wallet
     @Override
     public void doTransactionWrite(@NonNull final Collection<TransactWriteItem> items) {
         getDbClient().transactWriteItems(new TransactWriteItemsRequest().withTransactItems(items));
+    }
+
+    @Override
+    public void update(@NonNull final UpdateItemRequest request) {
+        getDbClient().updateItem(request);
     }
 }
