@@ -2,9 +2,12 @@ package io.openmarket.transaction.dao.dynamodb;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.KeyPair;
+import com.amazonaws.services.dynamodbv2.datamodeling.TransactionWriteRequest;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.openmarket.dynamodb.dao.dynamodb.AbstractDynamoDBDao;
 import io.openmarket.transaction.model.Transaction;
@@ -12,9 +15,8 @@ import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 import javax.inject.Inject;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static io.openmarket.config.TransactionConfig.*;
 
@@ -58,5 +60,18 @@ public class TransactionDaoImpl extends AbstractDynamoDBDao<Transaction> impleme
 
         log.info("Loaded {} transactions for payer with Id '{}'", queryResult.getCount(), payerId);
         return queryResult.getLastEvaluatedKey();
+    }
+
+    @Override
+    public List<Transaction> batchLoad(@NonNull final Collection<String> transactionIds) {
+        final List<KeyPair> keyPairs = transactionIds.stream()
+                .map(a -> new KeyPair().withHashKey(a)).collect(Collectors.toList());
+        final Map<String, List<Object>> loadResult = getDbMapper()
+                .batchLoad(ImmutableMap.of(Transaction.class, keyPairs));
+        final List<Object> transactionList = loadResult.get(TRANSACTION_DDB_TABLE_NAME);
+        if (transactionList == null) {
+            return Collections.emptyList();
+        }
+        return transactionList.stream().map(a -> (Transaction) a).collect(Collectors.toList());
     }
 }

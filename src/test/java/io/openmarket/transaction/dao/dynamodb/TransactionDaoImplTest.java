@@ -108,6 +108,22 @@ public class TransactionDaoImplTest {
         assertThrows(IllegalArgumentException.class, () -> transactionDao.save(transaction));
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = {0, 10})
+    public void test_BatchLoad(int count) {
+        Set<String> ids = new HashSet<>();
+        for (int i = 0; i < count; i++) {
+            Transaction transac = generateRandomTransaction();
+            ids.add(transac.getTransactionId());
+            transactionDao.save(transac);
+        }
+        List<Transaction> transactionList = transactionDao.batchLoad(ids);
+        assertEquals(ids.size(), transactionList.size());
+        transactionList.forEach(a -> {
+            assertTrue(ids.contains(a.getTransactionId()));
+        });
+    }
+
     @AfterAll
     public static void tearDown() {
         localDBClient.shutdown();

@@ -28,7 +28,6 @@ public class WalletDaoImpl extends AbstractDynamoDBDao<Wallet> implements Wallet
         return super.load(Wallet.class, key);
     }
 
-
     @Override
     public void doTransactionWrite(@NonNull final Collection<TransactWriteItem> items) {
         getDbClient().transactWriteItems(new TransactWriteItemsRequest().withTransactItems(items));
