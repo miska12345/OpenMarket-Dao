@@ -5,6 +5,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.sqs.AmazonSQS;
 import dagger.Module;
 import dagger.Provides;
+import io.openmarket.account.dynamodb.UserDao;
+import io.openmarket.account.dynamodb.UserDaoImpl;
 import io.openmarket.dynamodb.dao.sqs.SQSPublisher;
 import io.openmarket.transaction.dao.dynamodb.TransactionDao;
 import io.openmarket.transaction.dao.dynamodb.TransactionDaoImpl;
@@ -27,6 +29,12 @@ public class DaoModule {
     @Singleton
     WalletDao provideWalletDao(AmazonDynamoDB dbClient) {
         return new WalletDaoImpl(dbClient, new DynamoDBMapper(dbClient));
+    }
+
+    @Provides
+    @Singleton
+    UserDao provideUserDao(AmazonDynamoDB dbClient) {
+        return new UserDaoImpl(dbClient, new DynamoDBMapper(dbClient));
     }
 
     @Provides
