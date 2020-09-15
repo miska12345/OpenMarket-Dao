@@ -41,6 +41,6 @@ public class SQSTransactionTaskPublisher implements SQSPublisher<TransactionTask
 
     @VisibleForTesting
     protected boolean validate(final TransactionTask task) {
-        return !task.getTransactionId().isEmpty() && task.getRemainingAttempts() >= 0;
+        return !task.getTransactionId().isEmpty();
     }
 }

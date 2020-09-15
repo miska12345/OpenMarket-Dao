@@ -11,7 +11,4 @@ public class TransactionTask {
     @SerializedName("transactionId")
     @NonNull
     private String transactionId;
-
-    @SerializedName("attempts")
-    private int remainingAttempts;
 }

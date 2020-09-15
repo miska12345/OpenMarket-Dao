@@ -12,5 +12,5 @@ public enum TransactionErrorType {
     /**
      * INVALID_PAYMENT_AMOUNT means the payer doesn't have enough balance.
      */
-    INSUFFICIENT_PAYMENT_AMOUNT,
+    INSUFFICIENT_BALANCE,
 }

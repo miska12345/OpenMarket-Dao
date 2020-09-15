@@ -27,7 +27,7 @@ public class SQSTransactionTaskPublisherTest {
     public void test_Publish_Message() {
         String messageID = "123";
         when(sqsClient.sendMessage(any(SendMessageRequest.class))).thenReturn(new SendMessageResult().withMessageId(messageID));
-        String retId = publisher.publish(QUEUE_URL, TransactionTask.builder().transactionId("123").remainingAttempts(100).build());
+        String retId = publisher.publish(QUEUE_URL, TransactionTask.builder().transactionId("123").build());
         assertEquals(messageID, retId);
     }
 
@@ -38,8 +38,6 @@ public class SQSTransactionTaskPublisherTest {
 
     @Test
     public void test_Validate() {
-        assertFalse(publisher.validate(TransactionTask.builder().transactionId("").remainingAttempts(0).build()));
-        assertFalse(publisher.validate(TransactionTask.builder().transactionId("321").remainingAttempts(-1).build()));
-        assertTrue(publisher.validate(TransactionTask.builder().transactionId("321").remainingAttempts(23).build()));
+        assertFalse(publisher.validate(TransactionTask.builder().transactionId("").build()));
     }
 }
