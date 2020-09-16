@@ -63,7 +63,7 @@ dependencies {
 
 // Define the packages that should be excluded from JaCoCo.
 // For example, to exclude a package called 'a', add '**/a/**'.
-def excludeFromCoverage = ['**/model/*']
+def excludeFromCoverage = ['**/model/*', '**/module/*']
 
 jacocoTestReport {
     reports {

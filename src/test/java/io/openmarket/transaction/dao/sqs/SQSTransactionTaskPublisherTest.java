@@ -37,6 +37,11 @@ public class SQSTransactionTaskPublisherTest {
     }
 
     @Test
+    public void when_Publish_Invalid_Msg_Then_Throw_IllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> publisher.publish(QUEUE_URL, new TransactionTask("")));
+    }
+
+    @Test
     public void test_Validate() {
         assertFalse(publisher.validate(TransactionTask.builder().transactionId("").build()));
     }
