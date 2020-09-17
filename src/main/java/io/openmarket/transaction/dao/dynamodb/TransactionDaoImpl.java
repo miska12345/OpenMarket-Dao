@@ -35,7 +35,9 @@ public class TransactionDaoImpl extends AbstractDynamoDBDao<Transaction> impleme
         return !transaction.getTransactionId().isEmpty()
                 && !transaction.getPayerId().isEmpty()
                 && !transaction.getRecipientId().isEmpty()
-                && transaction.getMoneyAmount().validate();
+                && !transaction.getCurrencyId().isEmpty()
+                && transaction.getAmount() > 0;
+
     }
 
     @Override

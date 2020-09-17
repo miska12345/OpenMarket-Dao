@@ -28,9 +28,14 @@ public final class TransactionConfig {
     public static final String TRANSACTION_DDB_ATTRIBUTE_TYPE = "Type";
 
     /**
-     * The DDB attribute name for the amount and currency in this transaction.
+     * The DDB attribute name for the currency in this transaction.
      */
-    public static final String TRANSACTION_DDB_ATTRIBUTE_MONEY_AMOUNT = "MoneyAmount";
+    public static final String TRANSACTION_DDB_ATTRIBUTE_CURRENCY_ID = "CurrencyId";
+
+    /**
+     * The DDB attribute name for the amount in this transaction.
+     */
+    public static final String TRANSACTION_DDB_ATTRIBUTE_AMOUNT = "Amount";
 
     /**
      * The DDB attribute name for payer's unique Id.
