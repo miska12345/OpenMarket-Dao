@@ -63,9 +63,14 @@ public final class TransactionConfig {
     public static final String TRANSACTION_DDB_ATTRIBUTE_CREATED_AT = "CreatedAt";
 
     /**
-     * The DDB attribute name for for the timestamp of when this transaction was last modified.
+     * The DDB attribute name for the timestamp of when this transaction was last modified.
      */
     public static final String TRANSACTION_DDB_ATTRIBUTE_UPDATED_AT = "UpdatedAt";
+
+    /**
+     * The DDB attribute name for the refund transaction associated with this transaction.
+     */
+    public static final String TRANSACTION_DDB_ATTRIBUTE_REFUND_TRANSAC_ID = "RefundTransacId";
 
     /**
      * The DDB index name for payerId to transactionIds.

@@ -52,4 +52,7 @@ public class Transaction {
 
     @DynamoDBAttribute(attributeName = TRANSACTION_DDB_ATTRIBUTE_NOTE)
     private String note;
+
+    @DynamoDBAttribute(attributeName = TRANSACTION_DDB_ATTRIBUTE_REFUND_TRANSAC_ID)
+    private String refundTransactionId;
 }
