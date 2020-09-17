@@ -32,14 +32,10 @@ public class TransactionDaoImpl extends AbstractDynamoDBDao<Transaction> impleme
 
     @Override
     protected boolean validate(final Transaction transaction) {
-        return transaction.getTransactionId() != null
-                && !transaction.getTransactionId().isEmpty()
-                && transaction.getAmount() > 0
-                && transaction.getCurrencyId() != null
-                && !transaction.getCurrencyId().isEmpty()
-                && transaction.getPayerId() != null
-                && transaction.getRecipientId() != null
-                && transaction.getStatus() != null;
+        return !transaction.getTransactionId().isEmpty()
+                && !transaction.getPayerId().isEmpty()
+                && !transaction.getRecipientId().isEmpty()
+                && transaction.getMoneyAmount().validate();
     }
 
     @Override

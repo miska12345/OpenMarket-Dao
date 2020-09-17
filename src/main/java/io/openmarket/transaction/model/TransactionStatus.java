@@ -5,22 +5,27 @@ package io.openmarket.transaction.model;
  */
 public enum TransactionStatus {
     /**
-     * PENDING - transaction is not done processing.
+     * PENDING - transaction is being processed.
      */
     PENDING,
 
     /**
-     * CONFIRMED - transaction has been finalized.
+     * COMPLETED - transaction has been finalized.
      */
-    CONFIRMED,
+    COMPLETED,
 
     /**
-     * ERROR - transaction error.
+     * ERROR - an error occurred while processing the transaction.
      */
     ERROR,
 
     /**
-     * CANCELLED - transaction not finalized.
+     * REFUND_STARTED - a refund is in progress.
      */
-    CANCELED
+    REFUND_STARTED,
+
+    /**
+     * REFUNDED - the transaction has been refunded.
+     */
+    REFUNDED
 }
