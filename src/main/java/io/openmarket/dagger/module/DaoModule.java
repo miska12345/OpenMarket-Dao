@@ -8,6 +8,8 @@ import dagger.Provides;
 import io.openmarket.account.dynamodb.UserDao;
 import io.openmarket.account.dynamodb.UserDaoImpl;
 import io.openmarket.dynamodb.dao.sqs.SQSPublisher;
+import io.openmarket.organization.dao.OrgDao;
+import io.openmarket.organization.dao.OrgDaoImpl;
 import io.openmarket.transaction.dao.dynamodb.TransactionDao;
 import io.openmarket.transaction.dao.dynamodb.TransactionDaoImpl;
 import io.openmarket.transaction.dao.sqs.SQSTransactionTaskPublisher;
@@ -36,6 +38,13 @@ public class DaoModule {
     UserDao provideUserDao(AmazonDynamoDB dbClient) {
         return new UserDaoImpl(dbClient, new DynamoDBMapper(dbClient));
     }
+
+    @Provides
+    @Singleton
+    OrgDao provideOrgDao(AmazonDynamoDB dbClient) {
+        return new OrgDaoImpl(dbClient, new DynamoDBMapper(dbClient));
+    }
+
 
     @Provides
     @Singleton
