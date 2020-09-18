@@ -2,6 +2,7 @@ package io.openmarket.transaction.dao.dynamodb;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.TransactionWriteRequest;
 import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
 import com.amazonaws.services.dynamodbv2.local.shared.access.AmazonDynamoDBLocal;
 import com.amazonaws.services.dynamodbv2.model.*;
@@ -124,13 +125,42 @@ public class TransactionDaoImplTest {
         });
     }
 
+    @Test
+    public void test_transactionWrite() {
+        Transaction a = generateRandomTransaction();
+        Transaction b = generateRandomTransaction();
+        a.setStatus(TransactionStatus.COMPLETED);
+        b.setStatus(TransactionStatus.ERROR);
+
+        transactionDao.transactionWrite(new TransactionWriteRequest().addPut(a).addPut(b));
+
+        a = transactionDao.load(a.getTransactionId()).get();
+        b = transactionDao.load(b.getTransactionId()).get();
+
+        assertEquals(TransactionStatus.COMPLETED, a.getStatus());
+        assertEquals(TransactionStatus.ERROR, b.getStatus());
+    }
+
+    @Test
+    public void test_Outdated_Save_Throws_Exception() {
+        Transaction a = generateRandomTransaction();
+        transactionDao.save(a);
+
+        Transaction b = transactionDao.load(a.getTransactionId()).get();
+        b.setStatus(TransactionStatus.REFUNDED);
+        transactionDao.save(b);
+
+        a.setStatus(TransactionStatus.COMPLETED);
+        assertThrows(ConditionalCheckFailedException.class, () -> transactionDao.save(a));
+    }
+
     @AfterAll
     public static void tearDown() {
         localDBClient.shutdown();
     }
 
     private Transaction generateRandomTransaction() {
-        return Transaction.builder().transactionId(String.valueOf(System.currentTimeMillis()))
+        return Transaction.builder().transactionId(UUID.randomUUID().toString())
                 .payerId(PAYER_ID)
                 .status(TransactionStatus.PENDING)
                 .recipientId("123")

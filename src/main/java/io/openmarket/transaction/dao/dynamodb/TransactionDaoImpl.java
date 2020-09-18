@@ -2,7 +2,9 @@ package io.openmarket.transaction.dao.dynamodb;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTransactionWriteExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.KeyPair;
+import com.amazonaws.services.dynamodbv2.datamodeling.TransactionWriteRequest;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
@@ -69,5 +71,9 @@ public class TransactionDaoImpl extends AbstractDynamoDBDao<Transaction> impleme
             return Collections.emptyList();
         }
         return transactionList.stream().map(a -> (Transaction) a).collect(Collectors.toList());
+    }
+
+    public void transactionWrite(@NonNull final TransactionWriteRequest request) {
+        getDbMapper().transactionWrite(request);
     }
 }

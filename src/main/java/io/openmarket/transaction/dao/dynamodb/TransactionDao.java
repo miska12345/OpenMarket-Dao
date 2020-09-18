@@ -1,5 +1,6 @@
 package io.openmarket.transaction.dao.dynamodb;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.TransactionWriteRequest;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import io.openmarket.dynamodb.dao.dynamodb.DynamoDBDao;
 import io.openmarket.transaction.model.Transaction;
@@ -28,4 +29,10 @@ public interface TransactionDao extends DynamoDBDao<Transaction> {
      * @return a List of Transactions.
      */
     List<Transaction> batchLoad(Collection<String> transactionIds);
+
+    /**
+     * Use transaction to write multiple items.
+     * @param request the request to do transaction write.
+     */
+    void transactionWrite(TransactionWriteRequest request);
 }

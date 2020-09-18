@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 import static io.openmarket.config.TransactionConfig.*;
 
@@ -55,5 +56,8 @@ public class Transaction {
     private String note;
 
     @DynamoDBAttribute(attributeName = TRANSACTION_DDB_ATTRIBUTE_REFUND_TRANSAC_ID)
-    private String refundTransacId;
+    private List<String> refundTransacIds;
+
+    @DynamoDBVersionAttribute
+    private Integer version;
 }

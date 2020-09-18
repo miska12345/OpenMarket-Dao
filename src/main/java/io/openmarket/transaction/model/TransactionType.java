@@ -12,5 +12,10 @@ public enum TransactionType {
     /**
      * PAY type - one party pay the another party.
      */
-    PAY
+    PAY,
+
+    /**
+     * REFUND type - this transaction is a refund of another transaction.
+     */
+    REFUND
 }
