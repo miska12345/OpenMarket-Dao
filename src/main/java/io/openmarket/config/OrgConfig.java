@@ -22,5 +22,6 @@ public class OrgConfig {
 
     public static final String ORG_DDB_ATTRIBUTE_CREATED_AT = "CreatedAt";
 
+    public static final String ORG_DDB_ATTRIBUTE_SELLING = "SellItem";
 
 }

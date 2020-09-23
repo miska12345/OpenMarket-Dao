@@ -1,6 +1,7 @@
 package io.openmarket.dagger.module;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.sqs.AmazonSQS;
 import dagger.Module;
@@ -8,6 +9,8 @@ import dagger.Provides;
 import io.openmarket.account.dynamodb.UserDao;
 import io.openmarket.account.dynamodb.UserDaoImpl;
 import io.openmarket.dynamodb.dao.sqs.SQSPublisher;
+import io.openmarket.marketplace.dao.ItemDao;
+import io.openmarket.marketplace.dao.ItemDaoImpl;
 import io.openmarket.organization.dao.OrgDao;
 import io.openmarket.organization.dao.OrgDaoImpl;
 import io.openmarket.transaction.dao.dynamodb.TransactionDao;
@@ -45,6 +48,9 @@ public class DaoModule {
         return new OrgDaoImpl(dbClient, new DynamoDBMapper(dbClient));
     }
 
+    @Provides
+    @Singleton
+    ItemDao provideItemDao(AmazonDynamoDBClient dbClient) {return new ItemDaoImpl(dbClient, new DynamoDBMapper((dbClient))); }
 
     @Provides
     @Singleton
