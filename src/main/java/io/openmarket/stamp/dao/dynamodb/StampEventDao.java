@@ -12,4 +12,10 @@ public interface StampEventDao extends DynamoDBDao<StampEvent> {
      * @param request the request to execute.
      */
     void update(UpdateItemRequest request);
+
+    /**
+     * Delete an event from DB.
+     * @param eventId the eventId to delete.
+     */
+    void delete(String eventId);
 }

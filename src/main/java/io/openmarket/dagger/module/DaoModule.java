@@ -13,6 +13,8 @@ import io.openmarket.marketplace.dao.ItemDao;
 import io.openmarket.marketplace.dao.ItemDaoImpl;
 import io.openmarket.organization.dao.OrgDao;
 import io.openmarket.organization.dao.OrgDaoImpl;
+import io.openmarket.stamp.dao.dynamodb.StampEventDao;
+import io.openmarket.stamp.dao.dynamodb.StampEventDaoImpl;
 import io.openmarket.transaction.dao.dynamodb.TransactionDao;
 import io.openmarket.transaction.dao.dynamodb.TransactionDaoImpl;
 import io.openmarket.transaction.dao.sqs.SQSTransactionTaskPublisher;
@@ -50,7 +52,15 @@ public class DaoModule {
 
     @Provides
     @Singleton
-    ItemDao provideItemDao(AmazonDynamoDBClient dbClient) {return new ItemDaoImpl(dbClient, new DynamoDBMapper((dbClient))); }
+    ItemDao provideItemDao(AmazonDynamoDBClient dbClient) {
+        return new ItemDaoImpl(dbClient, new DynamoDBMapper((dbClient)));
+    }
+
+    @Provides
+    @Singleton
+    StampEventDao provideEventDao(AmazonDynamoDBClient dbClient) {
+        return new StampEventDaoImpl(dbClient, new DynamoDBMapper(dbClient));
+    }
 
     @Provides
     @Singleton
