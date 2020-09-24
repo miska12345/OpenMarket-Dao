@@ -52,13 +52,13 @@ public class DaoModule {
 
     @Provides
     @Singleton
-    ItemDao provideItemDao(AmazonDynamoDBClient dbClient) {
+    ItemDao provideItemDao(AmazonDynamoDB dbClient) {
         return new ItemDaoImpl(dbClient, new DynamoDBMapper((dbClient)));
     }
 
     @Provides
     @Singleton
-    StampEventDao provideEventDao(AmazonDynamoDBClient dbClient) {
+    StampEventDao provideEventDao(AmazonDynamoDB dbClient) {
         return new StampEventDaoImpl(dbClient, new DynamoDBMapper(dbClient));
     }
 
