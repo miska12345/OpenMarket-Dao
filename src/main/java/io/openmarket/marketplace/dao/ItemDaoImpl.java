@@ -3,6 +3,7 @@ package io.openmarket.marketplace.dao;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.KeyPair;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
@@ -10,14 +11,14 @@ import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
 import com.google.common.collect.ImmutableMap;
 import io.openmarket.dynamodb.dao.dynamodb.AbstractDynamoDBDao;
 import io.openmarket.marketplace.model.Item;
+import io.openmarket.transaction.model.Transaction;
 import lombok.extern.log4j.Log4j2;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static io.openmarket.config.MerchandiseConfig.*;
 
@@ -64,6 +65,20 @@ public class ItemDaoImpl extends AbstractDynamoDBDao<Item> implements ItemDao {
 
     public void update(UpdateItemRequest request) {
         this.getDbClient().updateItem(request);
+    }
+
+
+    public List<Item> batchLoad(@Nonnull final Collection<String> itemIds) {
+        final List<KeyPair> keyPairs = itemIds.stream()
+                .map((a) -> new KeyPair().withHashKey(a))
+                .collect(Collectors.toList());
+        final Map<String, List<Object>> loadResult = this.getDbMapper()
+                .batchLoad(ImmutableMap.of(Item.class, keyPairs));
+        final List<Object> result = loadResult.get(ITEM_DDB_TABLE_NAME);
+        if (result == null)
+            return Collections.emptyList();
+
+        return result.stream().map(a -> (Item)a).collect(Collectors.toList());
     }
 
     @Override
