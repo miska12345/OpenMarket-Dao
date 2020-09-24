@@ -40,6 +40,8 @@ public class ItemDaoImpl extends AbstractDynamoDBDao<Item> implements ItemDao {
         return true;
     }
 
+    //Todo add exclusive start key and return that to the user after each result
+
     public List<String> getItemIdsByOrg(@Nonnull final String orgId) {
         List<String> itemIds = new ArrayList<>();
         QueryRequest request = new QueryRequest().withTableName(ITEM_DDB_TABLE_NAME)

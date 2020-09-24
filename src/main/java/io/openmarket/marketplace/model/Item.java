@@ -35,7 +35,7 @@ public class Item {
     private int purchasedCount;
 
     @DynamoDBAttribute(attributeName = ITEM_DDB_ATTRIBUTE_PRICE)
-    private int itemPrice;
+    private Double itemPrice;
 
     @DynamoDBAttribute(attributeName = ITEM_DDB_ATTRIBUTE_DESCRIPTION)
     private String itemDescription;
