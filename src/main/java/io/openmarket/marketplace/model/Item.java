@@ -29,7 +29,7 @@ public class Item {
     @Nonnull private String belongTo;
 
     @DynamoDBAttribute(attributeName = ITEM_DDB_ATTRIBUTE_STOCK)
-    @Nonnull private int stock;
+    private int stock;
 
     @DynamoDBAttribute(attributeName = ITEM_DDB_ATTRIBUTE_PURCHASE_COUNT)
     private int purchasedCount;
