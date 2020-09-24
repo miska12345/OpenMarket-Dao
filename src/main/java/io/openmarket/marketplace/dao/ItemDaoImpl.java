@@ -2,14 +2,26 @@ package io.openmarket.marketplace.dao;
 
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.QueryRequest;
+import com.amazonaws.services.dynamodbv2.model.QueryResult;
+import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
+import com.google.common.collect.ImmutableMap;
 import io.openmarket.dynamodb.dao.dynamodb.AbstractDynamoDBDao;
 import io.openmarket.marketplace.model.Item;
+import lombok.extern.log4j.Log4j2;
 
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import static io.openmarket.config.MerchandiseConfig.*;
+
+@Log4j2
 public class ItemDaoImpl extends AbstractDynamoDBDao<Item> implements ItemDao {
 
     @Inject
@@ -25,6 +37,33 @@ public class ItemDaoImpl extends AbstractDynamoDBDao<Item> implements ItemDao {
             return false;
         }
         return true;
+    }
+
+    public List<String> getItemIdsByOrg(@Nonnull final String orgId) {
+        List<String> itemIds = new ArrayList<>();
+        QueryRequest request = new QueryRequest().withTableName(ITEM_DDB_TABLE_NAME)
+                .withIndexName(ITEM_DDB_INDEX_ORGID_2_ITEMID)
+                .withKeyConditionExpression("#id = :v")
+                .withFilterExpression("#stock > :count")
+                .withExpressionAttributeNames(
+                        ImmutableMap.of("#id", ITEM_DDB_ATTRIBUTE_BELONG_TO, "#stock", ITEM_DDB_ATTRIBUTE_STOCK)
+                )
+                .withExpressionAttributeValues(
+                        ImmutableMap.of(":v", new AttributeValue(orgId), ":count", new AttributeValue().withN("0"))
+                );
+
+        QueryResult items = this.getDbClient().query(request);
+        List<Map<String, AttributeValue>> data = items.getItems();
+        log.info(data);
+        for(Map<String, AttributeValue> item : data) {
+            itemIds.add(item.get(ITEM_DDB_ATTRIBUTE_ID).getS());
+        }
+
+        return itemIds;
+    }
+
+    public void update(UpdateItemRequest request) {
+        this.getDbClient().updateItem(request);
     }
 
     @Override

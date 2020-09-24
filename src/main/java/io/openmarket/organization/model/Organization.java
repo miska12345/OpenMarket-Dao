@@ -44,7 +44,4 @@ public class Organization {
     @DynamoDBTypeConvertedTimestamp
     @DynamoDBAttribute(attributeName = ORG_DDB_ATTRIBUTE_CREATED_AT)
     private Date createdAt;
-
-    @DynamoDBAttribute(attributeName = ORG_DDB_ATTRIBUTE_SELLING)
-    private Set<String> itemID;
 }
