@@ -20,4 +20,10 @@ public class OrderConfig {
     public static final String ORDER_DDB_ATTRIBUTE_ITEM_SUMMARY = "ItemSummary";
 
     public static final String ORDER_DDB_ATTRIBUTE_TOTAL = "OrderTotal";
+
+    public static final String ORDER_DDB_ATTRIBUTE_TRANSACTION_ID = "TransactionId";
+
+    public static final String ORDER_DDB_ATTRIBUTE_CREATED_AT= "CreatedAt";
+
+    public static final String ORDER_DDB_ATTRIBUTE_UPDATED_AT= "UpdatedAt";
 }
