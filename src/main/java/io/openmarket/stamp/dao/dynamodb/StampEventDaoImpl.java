@@ -12,11 +12,13 @@ import io.openmarket.dynamodb.dao.dynamodb.AbstractDynamoDBDao;
 import io.openmarket.stamp.model.StampEvent;
 import lombok.NonNull;
 
+import javax.inject.Inject;
 import java.util.Optional;
 
 import static io.openmarket.config.StampEventConfig.*;
 
 public class StampEventDaoImpl extends AbstractDynamoDBDao<StampEvent> implements StampEventDao {
+    @Inject
     public StampEventDaoImpl(AmazonDynamoDB dbClient, DynamoDBMapper dbMapper) {
         super(dbClient, dbMapper);
     }
