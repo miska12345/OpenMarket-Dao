@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.Date;
-import java.util.Set;
 import java.util.UUID;
 
 import static io.openmarket.config.StampEventConfig.*;
@@ -36,9 +35,6 @@ public class StampEvent {
     @DynamoDBTypeConvertedEnum
     @DynamoDBAttribute(attributeName = EVENT_DDB_ATTRIBUTE_OWNER_TYPE)
     @NonNull private EventOwnerType type = EventOwnerType.ORGANIZATION;
-
-    @DynamoDBAttribute(attributeName = EVENT_DDB_ATTRIBUTE_PARTICIPANTS)
-    private Set<String> participants;
 
     @DynamoDBAttribute(attributeName = EVENT_DDB_ATTRIBUTE_EXPIRE_AT)
     @NonNull private Date expireAt;
