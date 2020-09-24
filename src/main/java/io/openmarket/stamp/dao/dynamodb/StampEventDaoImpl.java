@@ -48,21 +48,7 @@ public class StampEventDaoImpl extends AbstractDynamoDBDao<StampEvent> implement
     }
 
     @Override
-    public Optional<Double> getEventRewardAmount(@NonNull final String eventId) {
-        return getEventRewardDetail(eventId, EVENT_DDB_ATTRIBUTE_REWARD_AMOUNT);
-    }
-
-    @Override
-    public Optional<Double> getEventRewardTotalAmount(@NonNull final String eventId) {
-        return getEventRewardDetail(eventId, EVENT_DDB_ATTRIBUTE_TOTAL_AMOUNT);
-    }
-
-    @Override
-    public Optional<Double> getEventRewardRemainAmount(@NonNull final String eventId) {
-        return getEventRewardDetail(eventId, EVENT_DDB_ATTRIBUTE_REMAINING_AMOUNT);
-    }
-
-    private Optional<Double> getEventRewardDetail(@NonNull final String eventId, @NonNull final String attribute) {
+    public Optional<AttributeValue> getCustomAttributes(@NonNull final String eventId, String attribute) {
         final QueryResult result = getDbClient().query(new QueryRequest()
                 .withTableName(EVENT_DDB_TABLE_NAME)
                 .withKeyConditionExpression("#id = :eid")
@@ -71,10 +57,9 @@ public class StampEventDaoImpl extends AbstractDynamoDBDao<StampEvent> implement
                 .withProjectionExpression(attribute)
                 .withLimit(1)
         );
-        if (result.getCount() > 0) {
-            final Double amount = Double.parseDouble(result.getItems().get(0).get(attribute).getN());
-            return Optional.of(amount);
+        if (result.getItems().isEmpty()) {
+            return Optional.empty();
         }
-        return Optional.empty();
+        return Optional.of(result.getItems().get(0).get(attribute));
     }
 }
