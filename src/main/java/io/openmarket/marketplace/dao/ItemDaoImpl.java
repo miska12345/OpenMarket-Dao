@@ -3,6 +3,7 @@ package io.openmarket.marketplace.dao;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.KeyPair;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
@@ -13,6 +14,7 @@ import io.openmarket.dynamodb.dao.dynamodb.AbstractDynamoDBDao;
 import io.openmarket.marketplace.model.Item;
 import io.openmarket.transaction.model.Transaction;
 import lombok.extern.log4j.Log4j2;
+import sun.awt.datatransfer.ClipboardTransferable;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
@@ -62,6 +64,26 @@ public class ItemDaoImpl extends AbstractDynamoDBDao<Item> implements ItemDao {
             itemIds.add(item.get(ITEM_DDB_ATTRIBUTE_ID).getS());
         }
 
+        return itemIds;
+    }
+
+    public List<String> getItemIdByCategory(@Nonnull final String category, int limit) {
+        List<String> itemIds = new ArrayList<>();
+        QueryRequest request = new QueryRequest().withTableName(ITEM_DDB_TABLE_NAME)
+                .withIndexName(ITEM_DDB_INDEX_ITEMCATEGORY_ITEMPURCHASED)
+                .withLimit(limit)
+                .withKeyConditionExpression("#id = :v")
+                .withExpressionAttributeNames(
+                        ImmutableMap.of("#id", ITEM_DDB_ATTRIBUTE_CATEGORY)
+                )
+                .withExpressionAttributeValues(
+                        ImmutableMap.of(":v", new AttributeValue().withS(category))
+                );
+        QueryResult result = this.getDbClient().query(request);
+
+        for(Map<String, AttributeValue> item : result.getItems()) {
+            itemIds.add(item.get(ITEM_DDB_ATTRIBUTE_ID).getS());
+        }
         return itemIds;
     }
 
