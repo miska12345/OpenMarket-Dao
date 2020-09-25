@@ -45,6 +45,7 @@ public class Order {
     @DynamoDBAttribute(attributeName = ORDER_DDB_ATTRIBUTE_TOTAL)
     private double total;
 
+    @DynamoDBTypeConverted(converter = ItemInfoConverter.class)
     @DynamoDBAttribute(attributeName = ORDER_DDB_ATTRIBUTE_ITEM_SUMMARY)
     private List<ItemInfo> item_summary;
 
@@ -60,4 +61,5 @@ public class Order {
     @DynamoDBTypeConvertedTimestamp
     @DynamoDBAttribute(attributeName = ORDER_DDB_ATTRIBUTE_CREATED_AT)
     private String createdAt;
+
 }
