@@ -13,4 +13,5 @@ public interface ItemDao extends DynamoDBDao<Item> {
     List<String> getItemIdsByOrg(@Nonnull final String orgId);
     void update(UpdateItemRequest request);
     List<Item> batchLoad(@Nonnull final Collection<String> itemIds);
+    List<String> getItemIdByCategory(@Nonnull final String category, int limit);
 }

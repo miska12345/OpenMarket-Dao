@@ -35,7 +35,7 @@ public class Item {
     private int purchasedCount;
 
     @DynamoDBAttribute(attributeName = ITEM_DDB_ATTRIBUTE_PRICE)
-    private Double itemPrice;
+    private double itemPrice;
 
     @DynamoDBAttribute(attributeName = ITEM_DDB_ATTRIBUTE_DESCRIPTION)
     private String itemDescription;
@@ -50,7 +50,4 @@ public class Item {
     @DynamoDBTypeConvertedTimestamp
     @DynamoDBAttribute(attributeName = ITEM_DDB_ATTRIBUTE_CREATE_AT)
     private Date createAt;
-
-
-
 }
