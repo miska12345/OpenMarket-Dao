@@ -23,5 +23,6 @@ public class MerchandiseConfig {
 
     public static final String ITEM_DDB_ATTRIBUTE_IMAGE_LINK = "ItemImageLink";
 
+    public static final String ITEM_DDB_ATTRIBUTE_CATEGORY = "ItemCategory";
 
 }
