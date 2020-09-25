@@ -31,7 +31,7 @@ public class OrderDaoImpl extends AbstractDynamoDBDao<Order> implements OrderDao
         return super.load(Order.class, key);
     }
 
-    public List<Order> getOrderBy(String buyerId) {
+    public List<Order> getOrdersById(String buyerId) {
         List<String> ids = getOrderIdsByBuyer(buyerId);
         List<Order> res = new ArrayList<>();
         for (String id: ids) {

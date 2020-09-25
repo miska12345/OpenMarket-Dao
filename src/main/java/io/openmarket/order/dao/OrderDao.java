@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface OrderDao extends DynamoDBDao<Order> {
     Optional<Order> getOrder(String orderId, String projection);
-    List<String> getOrderIdsByBuyer (String buyerId);
+    List<Order> getOrdersById(String buyerId);
 }
