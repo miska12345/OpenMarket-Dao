@@ -10,10 +10,10 @@ import io.openmarket.organization.model.Organization;
 import javax.inject.Inject;
 import java.util.Optional;
 
-public class OrderImpl extends AbstractDynamoDBDao<Order> implements OrderDao {
+public class OrderDaoImpl extends AbstractDynamoDBDao<Order> implements OrderDao {
 
     @Inject
-    public OrderImpl(AmazonDynamoDB dbClient, DynamoDBMapper dbMapper) {
+    public OrderDaoImpl(AmazonDynamoDB dbClient, DynamoDBMapper dbMapper) {
         super(dbClient, dbMapper);
     }
 
@@ -22,6 +22,7 @@ public class OrderImpl extends AbstractDynamoDBDao<Order> implements OrderDao {
         return super.load(Order.class, key);
     }
 
+    
 
     @Override
     public boolean validate(Order obj) {
