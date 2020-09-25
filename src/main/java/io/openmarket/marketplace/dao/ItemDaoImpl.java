@@ -14,7 +14,6 @@ import io.openmarket.dynamodb.dao.dynamodb.AbstractDynamoDBDao;
 import io.openmarket.marketplace.model.Item;
 import io.openmarket.transaction.model.Transaction;
 import lombok.extern.log4j.Log4j2;
-import sun.awt.datatransfer.ClipboardTransferable;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
