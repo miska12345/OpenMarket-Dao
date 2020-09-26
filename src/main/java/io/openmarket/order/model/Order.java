@@ -33,9 +33,6 @@ public class Order {
     @DynamoDBAttribute(attributeName = ORDER_DDB_ATTRIBUTE_DELIVERY_METHOD)
     private String delivery_method;
 
-    @DynamoDBAttribute(attributeName = ORDER_DDB_ATTRIBUTE_TRACKING_NUMBER)
-    private String tracking_number;
-
     @DynamoDBAttribute(attributeName = ORDER_DDB_ATTRIBUTE_PAYMENT_METHOD)
     private String payment_method;
 
@@ -45,6 +42,7 @@ public class Order {
     @DynamoDBAttribute(attributeName = ORDER_DDB_ATTRIBUTE_TOTAL)
     private double total;
 
+    @DynamoDBTypeConverted(converter = ItemInfoConverter.class)
     @DynamoDBAttribute(attributeName = ORDER_DDB_ATTRIBUTE_ITEM_SUMMARY)
     private List<ItemInfo> item_summary;
 
@@ -60,4 +58,5 @@ public class Order {
     @DynamoDBTypeConvertedTimestamp
     @DynamoDBAttribute(attributeName = ORDER_DDB_ATTRIBUTE_CREATED_AT)
     private String createdAt;
+
 }

@@ -57,5 +57,7 @@ public class UserDaoImplTest {
                 .withProvisionedThroughput(new ProvisionedThroughput(5L, 5L)));
     }
 
+
+
 }
 

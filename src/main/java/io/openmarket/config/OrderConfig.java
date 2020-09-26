@@ -26,4 +26,6 @@ public class OrderConfig {
     public static final String ORDER_DDB_ATTRIBUTE_CREATED_AT= "CreatedAt";
 
     public static final String ORDER_DDB_ATTRIBUTE_UPDATED_AT= "UpdatedAt";
+
+    public static final String ORDER_DDB_INDEX_BUYER_2_ORDERID = "Buyer-index";
 }
