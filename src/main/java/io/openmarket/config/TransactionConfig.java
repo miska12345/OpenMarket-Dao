@@ -84,6 +84,12 @@ public final class TransactionConfig {
             TRANSACTION_DDB_ATTRIBUTE_PAYER_ID, TRANSACTION_DDB_ATTRIBUTE_CREATED_AT);
 
     /**
+     * The DDB index name for recipientId to transactionIds.
+     */
+    public static final String TRANSACTION_DDB_INDEX_RECIPIENT_NAME = String.format("%s-%s-index",
+            TRANSACTION_DDB_ATTRIBUTE_RECIPIENT_ID, TRANSACTION_DDB_ATTRIBUTE_CREATED_AT);
+
+    /**
      * ------------------------------------------------------
      * Transaction Initial Values.
      * ------------------------------------------------------
