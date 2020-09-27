@@ -24,6 +24,17 @@ public interface TransactionDao extends DynamoDBDao<Transaction> {
                                                        Map<String, AttributeValue> exclusiveStartKey);
 
     /**
+     * getTransactionForRecipient get transactions with the given recipientId.
+     * @param recipientId the recipientId to get transaction for.
+     * @param output the output collection.
+     * @param exclusiveStartKey the exclusiveStartKey of DDB query.
+     * @return the lastEvaluatedKey of the query, can be used for exclusiveStartKey to retrieve more results.
+     */
+    Map<String, AttributeValue> getTransactionForRecipient(String recipientId,
+                                                           Collection<Transaction> output,
+                                                           Map<String, AttributeValue> exclusiveStartKey);
+
+    /**
      * Use batch to load a collection of {@link Transaction}.
      * @param transactionIds a Collection containing transactions to load.
      * @return a List of Transactions.

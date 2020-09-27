@@ -46,18 +46,18 @@ public class TransactionDaoImpl extends AbstractDynamoDBDao<Transaction> impleme
     public Map<String, AttributeValue> getTransactionForPayer(@NonNull final String payerId,
                                                     @NonNull final Collection<Transaction> output,
                                                     final Map<String, AttributeValue> exclusiveStartKey) {
-        final QueryRequest request = new QueryRequest()
-                .withTableName(TRANSACTION_DDB_TABLE_NAME)
-                .withIndexName(TRANSACTION_DDB_INDEX_NAME)
-                .withExpressionAttributeValues(ImmutableMap.of(DDB_QUERY_VALUE, new AttributeValue(payerId)))
-                .withKeyConditionExpression(String.format("%s = %s", TRANSACTION_DDB_ATTRIBUTE_PAYER_ID,
-                        DDB_QUERY_VALUE))
-                .withExclusiveStartKey(exclusiveStartKey);
-        final QueryResult queryResult = getDbClient().query(request);
-        queryResult.getItems().forEach(a -> output.add(load(a.get(TRANSACTION_DDB_ATTRIBUTE_ID).getS()).get()));
+        return query(TRANSACTION_DDB_INDEX_NAME, TRANSACTION_DDB_ATTRIBUTE_PAYER_ID, payerId, output, exclusiveStartKey);
+    }
 
-        log.info("Loaded {} transactions for payer with Id '{}'", queryResult.getCount(), payerId);
-        return queryResult.getLastEvaluatedKey();
+    @Override
+    public Map<String, AttributeValue> getTransactionForRecipient(@NonNull final String recipientId,
+                                                                  @NonNull final Collection<Transaction> output,
+                                                                  final Map<String, AttributeValue> exclusiveStartKey) {
+        return query(TRANSACTION_DDB_INDEX_RECIPIENT_NAME,
+                TRANSACTION_DDB_ATTRIBUTE_RECIPIENT_ID,
+                recipientId,
+                output,
+                exclusiveStartKey);
     }
 
     @Override
@@ -73,7 +73,28 @@ public class TransactionDaoImpl extends AbstractDynamoDBDao<Transaction> impleme
         return transactionList.stream().map(a -> (Transaction) a).collect(Collectors.toList());
     }
 
+    @Override
     public void transactionWrite(@NonNull final TransactionWriteRequest request) {
         getDbMapper().transactionWrite(request);
+    }
+
+    private Map<String, AttributeValue> query(final String indexName,
+                                              final String attributeName,
+                                              final String userId,
+                                              final Collection<Transaction> output,
+                                              final Map<String, AttributeValue> exclusiveStartKey) {
+        final QueryRequest request = new QueryRequest()
+                .withTableName(TRANSACTION_DDB_TABLE_NAME)
+                .withIndexName(indexName)
+                .withExpressionAttributeValues(ImmutableMap.of(DDB_QUERY_VALUE, new AttributeValue(userId)))
+                .withKeyConditionExpression(String.format("%s = %s", attributeName,
+                        DDB_QUERY_VALUE))
+                .withScanIndexForward(false)
+                .withExclusiveStartKey(exclusiveStartKey);
+        final QueryResult queryResult = getDbClient().query(request);
+        queryResult.getItems().forEach(a -> output.add(load(a.get(TRANSACTION_DDB_ATTRIBUTE_ID).getS()).get()));
+
+        log.info("Loaded {} transactions for payer with Id '{}'", queryResult.getCount(), userId);
+        return queryResult.getLastEvaluatedKey();
     }
 }

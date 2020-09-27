@@ -66,10 +66,12 @@ public class ItemDaoImpl extends AbstractDynamoDBDao<Item> implements ItemDao {
         return itemIds;
     }
 
+    //Todo same as above, paginate result using exclusiveStartkey
     public List<String> getItemIdByCategory(@Nonnull final String category, int limit) {
         List<String> itemIds = new ArrayList<>();
         QueryRequest request = new QueryRequest().withTableName(ITEM_DDB_TABLE_NAME)
                 .withIndexName(ITEM_DDB_INDEX_ITEMCATEGORY_ITEMPURCHASED)
+                .withScanIndexForward(false)
                 .withLimit(limit)
                 .withKeyConditionExpression("#id = :v")
                 .withExpressionAttributeNames(
