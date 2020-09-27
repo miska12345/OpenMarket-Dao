@@ -89,6 +89,7 @@ public class TransactionDaoImpl extends AbstractDynamoDBDao<Transaction> impleme
                 .withExpressionAttributeValues(ImmutableMap.of(DDB_QUERY_VALUE, new AttributeValue(userId)))
                 .withKeyConditionExpression(String.format("%s = %s", attributeName,
                         DDB_QUERY_VALUE))
+                .withScanIndexForward(false)
                 .withExclusiveStartKey(exclusiveStartKey);
         final QueryResult queryResult = getDbClient().query(request);
         queryResult.getItems().forEach(a -> output.add(load(a.get(TRANSACTION_DDB_ATTRIBUTE_ID).getS()).get()));
