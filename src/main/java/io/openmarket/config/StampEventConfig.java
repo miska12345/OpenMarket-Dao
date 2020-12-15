@@ -69,6 +69,12 @@ public final class StampEventConfig {
     public static final String EVENT_DDB_ATTRIBUTE_ERROR_MESSAGE = "MessageOnError";
 
     /**
+     * The DDB index for the owner to createdAt index.
+     */
+    public static final String EVENT_DDB_INDEX_OWNER_CREATED_AT = String.format("%s-%s-index",
+            EVENT_DDB_ATTRIBUTE_OWNER_ID, EVENT_DDB_ATTRIBUTE_CREATED_AT);
+
+    /**
      * --------------------------------------------------------
      * Default Values.
      * --------------------------------------------------------
