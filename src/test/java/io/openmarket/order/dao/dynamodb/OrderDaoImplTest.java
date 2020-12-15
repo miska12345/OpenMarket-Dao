@@ -11,6 +11,8 @@ import io.openmarket.order.model.ItemInfo;
 import io.openmarket.order.model.Order;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.*;
+
+import java.util.List;
 import java.util.Optional;
 import static io.openmarket.config.OrderConfig.ORDER_DDB_ATTRIBUTE_ID;
 import static io.openmarket.config.OrderConfig.ORDER_DDB_TABLE_NAME;
@@ -61,7 +63,7 @@ public class OrderDaoImplTest {
     }
 
     @Test
-    public void can_Load_Org_when_Exists() {
+    public void can_Load_Order_when_Exists() {
         Order order = Order.builder()
                 .orderId("xsadsasliud")
                 .buyer("buyer")
@@ -86,6 +88,26 @@ public class OrderDaoImplTest {
         assertEquals(testOrder.getTotal(), order.getTotal());
     }
 
+    @Test
+    public void can_Load_OrderById_when_Exists() {
+        orderDao.save(generateOrder("abcdefg"));
+        orderDao.save(generateOrder("abcdefgh"));
+
+        List<String> res = orderDao.getOrderIdsByBuyer("buyer");
+
+        assertEquals(res.size(), 2);
+        assertTrue(ImmutableList.of("abcdefg", "abcdefgh").containsAll(res));
+
+        List<Order> orders = orderDao.getOrdersById("buyer");
+
+        assertEquals(2, orders.size());
+        System.out.println(orders.get(0));
+        System.out.println(orders.get(1));
+        assertTrue(orders.contains(generateOrder("abcdefg")));
+        assertTrue(orders.contains(generateOrder("abcdefgh")));
+
+    }
+
 
     @Test
     public void cannot_Load_If_Not_Exists() {
@@ -103,5 +125,23 @@ public class OrderDaoImplTest {
                 .withKeySchema(ImmutableList.of(new KeySchemaElement(ORDER_DDB_ATTRIBUTE_ID, KeyType.HASH)))
                 .withAttributeDefinitions(new AttributeDefinition(ORDER_DDB_ATTRIBUTE_ID, ScalarAttributeType.S))
                 .withProvisionedThroughput(new ProvisionedThroughput(5L, 5L)));
+    }
+
+
+    private static Order generateOrder(String id) {
+        return Order.builder().buyer("buyer")
+                .delivery_address("addr")
+                .delivery_method("2-day Prime")
+                .item_summary(ImmutableList.of(ItemInfo.builder().item_id("oaidjfo")
+                        .item_name("jacket")
+                        .price(39.99)
+                        .quantity(3).build(), ItemInfo.builder().item_id("owoidsi")
+                        .quantity(3)
+                        .item_name("jeans")
+                        .price(19.99).build()))
+                .seller("seller")
+                .orderId(id)
+                .transactionId("daioijfaisdojfioa")
+                .build();
     }
 }
