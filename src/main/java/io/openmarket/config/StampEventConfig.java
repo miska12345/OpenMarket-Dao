@@ -24,6 +24,11 @@ public final class StampEventConfig {
     public static final String EVENT_DDB_ATTRIBUTE_OWNER_TYPE = "OwnerType";
 
     /**
+     * The DDB attribute name for the event name.
+     */
+    public static final String EVENT_DDB_ATTRIBUTE_NAME = "EventName";
+
+    /**
      * The DDB attribute name for the set of participants who participated the event.
      */
     public static final String EVENT_DDB_ATTRIBUTE_PARTICIPANTS = "Participants";
@@ -89,4 +94,9 @@ public final class StampEventConfig {
      * The default message the user sees when he/she cannot be rewarded.
      */
     public static final String EVENT_DEFAULT_ERROR_MESSAGE = "Error";
+
+    /**
+     * The default event name for a new event.
+     */
+    public static final String EVENT_DEFAULT_NAME = "My Event";
 }

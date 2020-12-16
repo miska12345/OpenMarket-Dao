@@ -36,6 +36,10 @@ public class StampEvent {
     @DynamoDBAttribute(attributeName = EVENT_DDB_ATTRIBUTE_OWNER_TYPE)
     @NonNull private EventOwnerType type = EventOwnerType.ORGANIZATION;
 
+    @Builder.Default
+    @DynamoDBAttribute(attributeName = EVENT_DDB_ATTRIBUTE_NAME)
+    @NonNull private String name = EVENT_DEFAULT_NAME;
+
     @DynamoDBAttribute(attributeName = EVENT_DDB_ATTRIBUTE_EXPIRE_AT)
     @NonNull private Date expireAt;
 
