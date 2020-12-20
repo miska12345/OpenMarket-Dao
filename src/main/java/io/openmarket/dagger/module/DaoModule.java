@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.sqs.AmazonSQS;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import dagger.Module;
 import dagger.Provides;
 import io.openmarket.account.dynamodb.UserDao;
@@ -26,6 +27,10 @@ import io.openmarket.wallet.dao.dynamodb.WalletDao;
 import io.openmarket.wallet.dao.dynamodb.WalletDaoImpl;
 
 import javax.inject.Singleton;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 @Module(includes = AWSModule.class)
 public class DaoModule {
@@ -59,10 +64,27 @@ public class DaoModule {
         return new OrgDaoImpl(dbClient, new DynamoDBMapper(dbClient));
     }
 
+
     @Provides
     @Singleton
-    ItemDao provideItemDao(AmazonDynamoDB dbClient) {
-        return new ItemDaoImpl(dbClient, new DynamoDBMapper((dbClient)));
+    ItemDao provideItemDao(ComboPooledDataSource source){
+        return new ItemDaoImpl(source);
+    }
+
+    @Provides
+    @Singleton
+    ComboPooledDataSource provideComboPooledDataSource() {
+        ComboPooledDataSource cpds = new ComboPooledDataSource();
+        cpds.setJdbcUrl(System.getenv("DB_URL"));
+        cpds.setUser(System.getenv("DB_USER"));
+        cpds.setPassword(System.getenv("DB_PASS"));
+        cpds.setInitialPoolSize(5);
+        cpds.setMinPoolSize(5);
+        cpds.setAcquireIncrement(5);
+        cpds.setMaxPoolSize(20);
+        cpds.setMaxStatements(100);
+
+        return cpds;
     }
 
     @Provides
