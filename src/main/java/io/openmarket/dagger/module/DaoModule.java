@@ -28,6 +28,7 @@ import io.openmarket.wallet.dao.dynamodb.WalletDaoImpl;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
 @Module(includes = AWSModule.class)
@@ -67,6 +68,16 @@ public class DaoModule {
     @Singleton
     ItemDao provideItemDao(Connection conn){
         return new ItemDaoImpl(conn);
+    }
+
+    @Provides
+    @Singleton
+    Connection provideConnection() {
+        try {
+            return DriverManager.getConnection(System.getenv("DB_URL"));
+        } catch (Exception e) {
+            throw new IllegalStateException();
+        }
     }
 
     @Provides
