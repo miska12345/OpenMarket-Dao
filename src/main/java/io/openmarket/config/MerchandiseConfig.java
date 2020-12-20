@@ -27,5 +27,9 @@ public class MerchandiseConfig {
 
     public static final String ITEM_DDB_INDEX_ITEMCATEGORY_ITEMPURCHASED = "ItemCategory-index";
 
+    public static final String QUERY_BY_ORGID = "GET_ITEM_BY_ORGID";
+
+    public static final String QUERY_BY_ITEM_ID = "GET_ITEM_BY_ITEMID";
+
 
 }

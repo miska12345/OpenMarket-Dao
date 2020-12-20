@@ -30,6 +30,9 @@ src/generated/
 .iml
 .idea
 
+#SQL
+**/src/main/java/io/openmarket/sqlcredential/
+
 # Gradle
 .gradle
 **/build/

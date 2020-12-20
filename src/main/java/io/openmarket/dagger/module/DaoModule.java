@@ -26,6 +26,9 @@ import io.openmarket.wallet.dao.dynamodb.WalletDao;
 import io.openmarket.wallet.dao.dynamodb.WalletDaoImpl;
 
 import javax.inject.Singleton;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 @Module(includes = AWSModule.class)
 public class DaoModule {
@@ -61,8 +64,8 @@ public class DaoModule {
 
     @Provides
     @Singleton
-    ItemDao provideItemDao(AmazonDynamoDB dbClient) {
-        return new ItemDaoImpl(dbClient, new DynamoDBMapper((dbClient)));
+    ItemDao provideItemDao(Connection conn){
+        return new ItemDaoImpl(conn);
     }
 
     @Provides

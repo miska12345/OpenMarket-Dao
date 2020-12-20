@@ -59,6 +59,13 @@ dependencies {
     testCompile group: 'com.amazonaws', name: 'DynamoDBLocal', version: '1.13.3'
     testCompile group: 'com.almworks.sqlite4java', name: 'sqlite4java', version: '0.282'
 
+    // https://mvnrepository.com/artifact/org.craftercms.mariaDB4j/mariaDB4j
+    compile group: 'org.craftercms.mariaDB4j', name: 'mariaDB4j', version: '2.4.8'
+
+    // jdbc sql
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.15'
+    runtime "mysql:mysql-connector-java:8.0.15"
+
 }
 
 // Define the packages that should be excluded from JaCoCo.
