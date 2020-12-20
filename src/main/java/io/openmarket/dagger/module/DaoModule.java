@@ -62,6 +62,7 @@ public class DaoModule {
         return new OrgDaoImpl(dbClient, new DynamoDBMapper(dbClient));
     }
 
+
     @Provides
     @Singleton
     ItemDao provideItemDao(Connection conn){

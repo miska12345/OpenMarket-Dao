@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ItemDao {
 
-    List<String> getItemIdsByOrg(@Nonnull final String orgId) throws SQLException;
+    List<Integer> getItemIdsByOrg(@Nonnull final String orgId) throws SQLException;
 //    void update(UpdateItemRequest request);
     List<Item> batchLoad(@Nonnull final Collection<Integer> itemIds) throws SQLException;
 //    List<String> getItemIdByCategory(@Nonnull final String category, int limit);

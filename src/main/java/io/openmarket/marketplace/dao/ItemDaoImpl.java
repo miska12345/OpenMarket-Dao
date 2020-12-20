@@ -62,13 +62,13 @@ public class ItemDaoImpl extends AbstractMySQLDao implements ItemDao {
 
     //Todo add exclusive start key and return that to the user after each result
 
-    public List<String> getItemIdsByOrg(@Nonnull final String orgId) throws SQLException {
+    public List<Integer> getItemIdsByOrg(@Nonnull final String orgId) throws SQLException {
         this.getItemIDByOrgID.clearParameters();
         this.getItemIDByOrgID.setString(1,orgId);
         ResultSet rs = this.getItemIDByOrgID.executeQuery();
-        List<String> ids = new ArrayList<>();
+        List<Integer> ids = new ArrayList<>();
         while (rs.next()) {
-            String id = rs.getString("itemID");
+            int id = rs.getInt("itemID");
             ids.add(id);
         }
         return ids;
