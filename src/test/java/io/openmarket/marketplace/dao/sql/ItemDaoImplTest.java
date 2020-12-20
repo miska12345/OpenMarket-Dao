@@ -4,6 +4,7 @@ import ch.vorburger.exec.ManagedProcessException;
 import ch.vorburger.mariadb4j.DB;
 import com.google.common.collect.ImmutableList;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import io.openmarket.marketplace.dao.ItemDao;
 import io.openmarket.marketplace.dao.ItemDaoImpl;
 import io.openmarket.marketplace.model.Item;
@@ -22,34 +23,32 @@ import java.util.Properties;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ItemDaoImplTest {
-    static Connection conn;
+    static ComboPooledDataSource cpds;
     static DB database;
     @BeforeAll
     public static void setupDB() throws IOException, SQLException, ManagedProcessException {
         database = DB.newEmbeddedDB(3306);
         database.start();
-        conn = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "");
+        cpds = new ComboPooledDataSource();
+        cpds.setJdbcUrl("jdbc:mysql://localhost/test");
+        cpds.setUser("root");
+        cpds.setPassword("");
+        cpds.setInitialPoolSize(5);
+        cpds.setMinPoolSize(5);
+        cpds.setAcquireIncrement(5);
+        cpds.setMaxPoolSize(20);
+        cpds.setMaxStatements(100);
+        Connection conn = cpds.getConnection();
         Statement createTable = conn.createStatement();
         createTable.execute("CREATE TABLE ITEMS(itemID INT AUTO_INCREMENT , itemName VARCHAR(100) NOT NULL, belongTo VARCHAR(100) NOT NULL, stock INT NOT NULL,purchasedCount INT NOT NULL, itemPrice FLOAT NOT NULL,itemDescription VARCHAR(100) NOT NULL, itemImageLink VARCHAR(100) NOT NULL,itemCategory VARCHAR(100) NOT NULL, itemTag INT NOT NULL,showMarket BOOLEAN NOT NULL, PRIMARY KEY (itemID))");
 
     }
 
-//    @Test
-//    public void testItemDaoConstructor() throws SQLException{
-//        ItemDao itemDao = new ItemDaoImpl(this.conn);
-//        Statement statement = this.conn.createStatement();
-//        statement.execute(this.prop.getProperty("INSERT_ITEM"));
-//        List<String> result = itemDao.getItemIdsByOrg("123");
-//        for (String res : result) {
-//            assertEquals(res, "1");
-//        }
-//    }
-
 
     @Test
     public void testBatchLoad_When_Items_Exist() throws SQLException {
-        ItemDao itemDao = new ItemDaoImpl(this.conn);
-        Statement statement = this.conn.createStatement();
+        ItemDao itemDao = new ItemDaoImpl(this.cpds);
+        Statement statement = this.cpds.getConnection().createStatement();
         statement.execute(QueryStatements.INSERT_ITEM);
         statement.execute(QueryStatements.INSERT_ITEM);
         statement.execute(QueryStatements.INSERT_ITEM);
