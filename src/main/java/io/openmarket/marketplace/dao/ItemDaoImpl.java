@@ -12,6 +12,7 @@ import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
 import com.google.common.collect.ImmutableMap;
 import io.openmarket.dynamodb.dao.dynamodb.AbstractDynamoDBDao;
 import io.openmarket.marketplace.model.Item;
+import io.openmarket.marketplace.sql.QueryStatements;
 import io.openmarket.mysql.dao.AbstractMySQLDao;
 import io.openmarket.transaction.model.Transaction;
 import lombok.extern.log4j.Log4j2;
@@ -39,12 +40,13 @@ public class ItemDaoImpl extends AbstractMySQLDao implements ItemDao {
 
     private PreparedStatement getItemIDByOrgID;
     private PreparedStatement getItemByID;
+
     @Inject
     public ItemDaoImpl(@Nonnull Connection conn) {
-        super(conn, "./src/main/java/io/openmarket/marketplace/sql/QueryStatements.properties");
+        super(conn);
         try {
-            this.getItemIDByOrgID = this.getConn().prepareStatement(this.getQuery(QUERY_BY_ORGID));
-            this.getItemByID      = this.getConn().prepareStatement(this.getQuery(QUERY_BY_ITEM_ID));
+            this.getItemIDByOrgID = this.getConn().prepareStatement(QueryStatements.GET_ITEMID_BY_ORGID);
+            this.getItemByID      = this.getConn().prepareStatement(QueryStatements.GET_ITEM_BY_ITEMID);
         } catch (Exception e) {
             e.printStackTrace();
         }

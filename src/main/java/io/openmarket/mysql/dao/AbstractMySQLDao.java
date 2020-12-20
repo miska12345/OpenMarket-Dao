@@ -1,9 +1,11 @@
 package io.openmarket.mysql.dao;
 
+import io.openmarket.marketplace.sql.QueryStatements;
 import lombok.AccessLevel;
 import lombok.Getter;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -15,17 +17,9 @@ public class AbstractMySQLDao {
     @Getter(AccessLevel.PROTECTED)
     private Properties querystatements;
 
-    public AbstractMySQLDao(Connection dbconn, @Nonnull String queryFilePath){
+    @Inject
+    public AbstractMySQLDao(@Nonnull Connection dbconn){
         this.conn = dbconn;
-        this.querystatements = new Properties();
-        try {
-            this.querystatements.load(new FileInputStream(queryFilePath));
-        } catch(IOException e) {
-            throw new RuntimeException("Query File Not Found");
-        }
     }
 
-    public String getQuery(String queryName) {
-        return this.querystatements.getProperty(queryName);
-    }
 }

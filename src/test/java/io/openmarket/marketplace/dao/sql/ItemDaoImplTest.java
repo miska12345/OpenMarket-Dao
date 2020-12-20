@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableList;
 import io.openmarket.marketplace.dao.ItemDao;
 import io.openmarket.marketplace.dao.ItemDaoImpl;
 import io.openmarket.marketplace.model.Item;
+import io.openmarket.marketplace.sql.QueryStatements;
 import org.junit.jupiter.api.*;
 
 import java.io.FileInputStream;
@@ -22,19 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ItemDaoImplTest {
     static Connection conn;
-    static Properties prop;
     static DB database;
     @BeforeAll
     public static void setupDB() throws IOException, SQLException, ManagedProcessException {
-        prop = new Properties();
-        prop.load(new FileInputStream("./src/main/java/io/openmarket/marketplace/sql/QueryStatements.properties"));
-//
-//
-//        String dbhost = prop.getProperty("HOST");
-////        String user = prop.getProperty("USER");
-//        String password = prop.getProperty("PASSWORD");
-
-        //conn = DriverManager.getConnection(dbhost);
         database = DB.newEmbeddedDB(3306);
         database.start();
         conn = DriverManager.getConnection("jdbc:mysql://localhost/test", "root", "");
@@ -59,9 +50,9 @@ public class ItemDaoImplTest {
     public void testBatchLoad_When_Items_Exist() throws SQLException {
         ItemDao itemDao = new ItemDaoImpl(this.conn);
         Statement statement = this.conn.createStatement();
-        statement.execute(this.prop.getProperty("INSERT_ITEM"));
-        statement.execute(this.prop.getProperty("INSERT_ITEM"));
-        statement.execute(this.prop.getProperty("INSERT_ITEM"));
+        statement.execute(QueryStatements.INSERT_ITEM);
+        statement.execute(QueryStatements.INSERT_ITEM);
+        statement.execute(QueryStatements.INSERT_ITEM);
         List<Item> items = itemDao.batchLoad(ImmutableList.of(1,2,3));
         int count = 1;
         for (Item item : items) {
