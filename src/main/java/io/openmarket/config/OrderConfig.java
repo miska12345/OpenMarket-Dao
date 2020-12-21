@@ -28,4 +28,7 @@ public class OrderConfig {
 
     public static final String ORDER_DDB_INDEX_SELLER_ID_TO_CREATED_AT = String.format("%s-%s-index",
             ORDER_DDB_ATTRIBUTE_SELLER_ID, ORDER_DDB_ATTRIBUTE_CREATED_AT);
+
+    public static final String ORDER_DDB_INDEX_TRANSACTION_ID_TO_ORDER_ID = String.format("%s-%s-index",
+            ORDER_DDB_ATTRIBUTE_TRANSACTION_ID, ORDER_DDB_ATTRIBUTE_ORDER_ID);
 }

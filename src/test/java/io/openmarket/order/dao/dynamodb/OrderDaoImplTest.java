@@ -35,8 +35,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static io.openmarket.config.OrderConfig.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @Log4j2
@@ -150,6 +149,21 @@ public class OrderDaoImplTest {
         assertEquals(ordersToLoad.size() / 2, orders.size());
     }
 
+    @Test
+    public void test_Get_OrderId_By_TransactionId() {
+        String orderId = "1";
+        orderDao.save(generateOrder(orderId, BUYER_ID, SELLER_ID, OrderStatus.PAYMENT_CONFIRMED));
+        Optional<String> optionalOrderId = orderDao.getOrderIdByTransactionId(TRANSAC_ID);
+        assertTrue(optionalOrderId.isPresent());
+        assertEquals(orderId, optionalOrderId.get());
+    }
+
+    @Test
+    public void test_Get_OrderId_By_TransactionId_Not_Exist() {
+        Optional<String> optionalOrderId = orderDao.getOrderIdByTransactionId(TRANSAC_ID);
+        assertFalse(optionalOrderId.isPresent());
+    }
+
     private static Order generateOrder(String orderId, String buyerId, String sellerId, OrderStatus status) {
         return Order.builder()
                 .orderId(orderId)
@@ -170,7 +184,8 @@ public class OrderDaoImplTest {
                 .withAttributeDefinitions(new AttributeDefinition(ORDER_DDB_ATTRIBUTE_ORDER_ID, ScalarAttributeType.S),
                         new AttributeDefinition(ORDER_DDB_ATTRIBUTE_BUYER_ID, ScalarAttributeType.S),
                         new AttributeDefinition(ORDER_DDB_ATTRIBUTE_SELLER_ID, ScalarAttributeType.S),
-                        new AttributeDefinition(ORDER_DDB_ATTRIBUTE_CREATED_AT, ScalarAttributeType.S)
+                        new AttributeDefinition(ORDER_DDB_ATTRIBUTE_CREATED_AT, ScalarAttributeType.S),
+                        new AttributeDefinition(ORDER_DDB_ATTRIBUTE_TRANSACTION_ID, ScalarAttributeType.S)
                         )
                 .withGlobalSecondaryIndexes(new GlobalSecondaryIndex()
                         .withIndexName(ORDER_DDB_INDEX_BUYER_ID_TO_CREATED_AT)
@@ -192,6 +207,15 @@ public class OrderDaoImplTest {
                                         new KeySchemaElement()
                                                 .withKeyType(KeyType.RANGE)
                                                 .withAttributeName(ORDER_DDB_ATTRIBUTE_CREATED_AT))
+                                .withProjection(new Projection().withProjectionType(ProjectionType.INCLUDE)
+                                        .withNonKeyAttributes(ORDER_DDB_ATTRIBUTE_ORDER_ID))
+                                .withProvisionedThroughput(throughput),
+
+                        new GlobalSecondaryIndex()
+                                .withIndexName(ORDER_DDB_INDEX_TRANSACTION_ID_TO_ORDER_ID)
+                                .withKeySchema(new KeySchemaElement()
+                                                .withAttributeName(ORDER_DDB_ATTRIBUTE_TRANSACTION_ID)
+                                                .withKeyType(KeyType.HASH))
                                 .withProjection(new Projection().withProjectionType(ProjectionType.INCLUDE)
                                         .withNonKeyAttributes(ORDER_DDB_ATTRIBUTE_ORDER_ID))
                                 .withProvisionedThroughput(throughput)

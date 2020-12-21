@@ -3,6 +3,7 @@ package io.openmarket.order.dao;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.KeyPair;
+import com.amazonaws.services.dynamodbv2.datamodeling.QueryResultPage;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
@@ -75,6 +76,19 @@ public class OrderDaoImpl extends AbstractDynamoDBDao<Order> implements OrderDao
             return Collections.emptyList();
         }
         return ordersList.stream().map(a -> (Order) a).collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<String> getOrderIdByTransactionId(@NonNull final String transactionId) {
+        final QueryRequest request = new QueryRequest()
+                .withTableName(ORDER_DDB_TABLE_NAME)
+                .withIndexName(ORDER_DDB_INDEX_TRANSACTION_ID_TO_ORDER_ID)
+                .withKeyConditionExpression("#id = :val")
+                .withExpressionAttributeNames(ImmutableMap.of("#id", ORDER_DDB_ATTRIBUTE_TRANSACTION_ID))
+                .withExpressionAttributeValues(ImmutableMap.of(":val", new AttributeValue(transactionId)));
+        final QueryResult result = getDbClient().query(request);
+        return result.getItems().isEmpty() ?
+                Optional.empty() : Optional.of(result.getItems().get(0).get(ORDER_DDB_ATTRIBUTE_ORDER_ID).getS());
     }
 
     @Override

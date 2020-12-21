@@ -7,6 +7,7 @@ import io.openmarket.order.model.Order;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface OrderDao extends DynamoDBDao<Order> {
     /**
@@ -35,4 +36,11 @@ public interface OrderDao extends DynamoDBDao<Order> {
      * @return a List of orders loaded.
      */
     List<Order> batchLoad(Collection<String> orderIds);
+
+    /**
+     * Get the associated orderId for the given transactionId.
+     * @param transactionId the transactionId to get orderId for.
+     * @return an Optional wrapping the orderId if it exists.
+     */
+    Optional<String> getOrderIdByTransactionId(String transactionId);
 }
