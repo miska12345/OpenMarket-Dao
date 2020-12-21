@@ -48,10 +48,10 @@ public class OrderDaoImpl extends AbstractDynamoDBDao<Order> implements OrderDao
                                                  Collection<String> orderIds) {
         final QueryRequest request = new QueryRequest()
                 .withTableName(ORDER_DDB_TABLE_NAME)
-                .withIndexName(isBuyer ? DDB_ATTRIBUTE_INDEX_BUYER_ID_TO_CREATED_AT : DDB_ATTRIBUTE_INDEX_SELLER_ID_TO_CREATED_AT)
+                .withIndexName(isBuyer ? ORDER_DDB_INDEX_BUYER_ID_TO_CREATED_AT : ORDER_DDB_INDEX_SELLER_ID_TO_CREATED_AT)
                 .withKeyConditionExpression("#id = :v")
                 .withExpressionAttributeNames(
-                        ImmutableMap.of("#id", isBuyer ? DDB_ORDER__ATTRIBUTE_BUYER_ID : DDB_ORDER_ATTRIBUTE_SELLER_ID)
+                        ImmutableMap.of("#id", isBuyer ? ORDER_DDB_ATTRIBUTE_BUYER_ID : ORDER_DDB_ATTRIBUTE_SELLER_ID)
                 )
                 .withExpressionAttributeValues(
                         ImmutableMap.of(":v", new AttributeValue(id))
@@ -59,7 +59,7 @@ public class OrderDaoImpl extends AbstractDynamoDBDao<Order> implements OrderDao
                 .withExclusiveStartKey(exclusiveStartKey);
         final QueryResult result = super.getDbClient().query(request);
         for (Map<String, AttributeValue> order : result.getItems()) {
-            orderIds.add(order.get(DDB_ORDER_ATTRIBUTE_ORDER_ID).getS());
+            orderIds.add(order.get(ORDER_DDB_ATTRIBUTE_ORDER_ID).getS());
         }
         return result.getLastEvaluatedKey();
     }
