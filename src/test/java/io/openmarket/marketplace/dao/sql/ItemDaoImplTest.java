@@ -60,5 +60,17 @@ public class ItemDaoImplTest {
         }
     }
 
+    @Test
+    public void testGetItemsRankedByCount() throws SQLException {
+        ItemDao itemDao = new ItemDaoImpl(this.cpds);
+        Statement statement = this.cpds.getConnection().createStatement();
+        statement.execute(QueryStatements.INSERT_ITEM2);
+        statement.execute(QueryStatements.INSERT_ITEM);
+        List<Item> item = itemDao.getAllItemsRankedByPurchasedCount(2, "any");
+        assertEquals(item.get(0).getPurchasedCount(),10);
+        assertEquals(item.get(1).getPurchasedCount(), 1);
+    }
+
+
 
 }

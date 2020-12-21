@@ -21,4 +21,19 @@ public interface ItemDao {
      * @return a list of items.
      */
     List<Item> batchLoad(@Nonnull final Collection<Integer> itemIds);
+
+    /**
+     * Get all items sorted by purchasedCount descendingly
+     * @param limit the count of items needed
+     * @return list of all items
+     */
+    List<Item> getAllItemsRankedByPurchasedCount(int limit, String category);
+
+    /**
+     * Batch update the item by comparing updated and the one retrieved from itemids
+     * @param itemIds item ids that need to be updated
+     * @param updateColumn list of int of column index that needs to be update
+     * @param updated   list of updated item
+     */
+    void batchUpdate(@Nonnull final Collection<Integer> itemIds, List<Integer> updateColumn, List<Item> updated);
 }

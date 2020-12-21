@@ -7,14 +7,12 @@ import lombok.Getter;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.Properties;
 
-public class AbstractMySQLDao {
+public class AbstractMySQLDao<T> {
     @Getter(AccessLevel.PROTECTED)
     private final ComboPooledDataSource source;
-
-    @Getter(AccessLevel.PROTECTED)
-    private Properties querystatements;
 
     @Inject
     public AbstractMySQLDao(@Nonnull ComboPooledDataSource dbsource){

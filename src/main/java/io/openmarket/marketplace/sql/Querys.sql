@@ -22,3 +22,6 @@ CREATE TABLE ITEMS(
   #Random insert
   INSERT INTO ITEMS (itemName, belongTo, stock, purchasedCount, itemPrice, itemDescription, itemImageLink, itemCategory, itemTag, showMarket)
                         VALUES("name", "123", 100, 1 , 10.0, "This item realy good", "https??", "char", 3, FALSE)
+
+  #Get all items id ranked by count
+  Select * From ITEMS As I ORDER BY I.purchasedCount DESC LIMIT ?
