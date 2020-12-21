@@ -1,5 +1,6 @@
 package io.openmarket.order.model;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,13 +11,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemInfo {
+    @SerializedName("itemId")
+    private String itemId;
 
-    private String item_id;
+    @SerializedName("itemName")
+    private String itemName;
 
-    private String item_name;
-
+    @SerializedName("price")
     private double price;
 
+    @SerializedName("quantity")
     private int quantity;
-
 }

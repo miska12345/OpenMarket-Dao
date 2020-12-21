@@ -1,46 +1,25 @@
 package io.openmarket.order.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import lombok.extern.log4j.Log4j2;
 
-import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 public class ItemInfoConverter implements DynamoDBTypeConverter<String, List<ItemInfo>> {
-
+    private static final Gson GSON = new Gson();
     @Override
-    public String convert(List<ItemInfo> objects) {
-        //Jackson object mapper
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            String objectsString = objectMapper.writeValueAsString(objects);
-            return objectsString;
-        } catch (JsonProcessingException e) {
-            //do something
-        }
-        return null;
+    public String convert(List<ItemInfo> items) {
+        return GSON.toJson(items);
     }
 
     @Override
     public List<ItemInfo> unconvert(String objectsString) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            List<ItemInfo> objects = objectMapper.readValue(objectsString, new TypeReference<List<ItemInfo>>(){});
-            return objects;
-        } catch (JsonParseException e) {
-            //do something
-            System.out.println(e);
-        } catch (JsonMappingException e) {
-            //do something
-            System.out.println(e);
-        } catch (IOException e) {
-            //do something
-            System.out.println(e);
-        }
-        return null;
+        Type listType = new TypeToken<ArrayList<ItemInfo>>(){}.getType();
+        return GSON.fromJson(objectsString, listType);
     }
 }

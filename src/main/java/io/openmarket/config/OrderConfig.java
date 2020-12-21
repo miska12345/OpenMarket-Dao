@@ -1,31 +1,31 @@
 package io.openmarket.config;
 
 public class OrderConfig {
-    public static final String ORDER_DDB_TABLE_NAME = "Order";
+    public static final String ORDER_DDB_TABLE_NAME = "Orders";
 
-    public static final String ORDER_DDB_ATTRIBUTE_ID = "OrderId";
+    public static final String DDB_ORDER__ATTRIBUTE_BUYER_ID = "buyerId";
 
-    public static final String ORDER_DDB_ATTRIBUTE_BUYER = "Buyer";
+    public static final String DDB_ORDER_ATTRIBUTE_SELLER_ID = "sellerId";
 
-    public static final String ORDER_DDB_ATTRIBUTE_SELLER = "Seller";
+    public static final String DDB_ORDER_ATTRIBUTE_TOTAL_AMOUNT = "total";
 
-    public static final String ORDER_DDB_ATTRIBUTE_DELIVERY_METHOD = "DeliveryMethod";
+    public static final String DDB_ORDER_ATTRIBUTE_STATUS = "status";
 
-    public static final String ORDER_DDB_ATTRIBUTE_TRACKING_NUMBER = "TrackingNumber";
+    public static final String DDB_ORDER_ATTRIBUTE_TRANSACTION_ID = "transactionId";
 
-    public static final String ORDER_DDB_ATTRIBUTE_PAYMENT_METHOD = "PaymentMethod";
+    public static final String DDB_ORDER_ATTRIBUTE_ORDER_ID = "orderId";
 
-    public static final String ORDER_DDB_ATTRIBUTE_DELIVERY_ADDR = "DeliveryAddress";
+    public static final String DDB_ORDER_ATTRIBUTE_CURRENCY = "currency";
 
-    public static final String ORDER_DDB_ATTRIBUTE_ITEM_SUMMARY = "ItemSummary";
+    public static final String DDB_ORDER_ATTRIBUTE_ITEMS = "items";
 
-    public static final String ORDER_DDB_ATTRIBUTE_TOTAL = "OrderTotal";
+    public static final String DDB_ORDER_ATTRIBUTE_UPDATED_AT = "lastUpdateAt";
 
-    public static final String ORDER_DDB_ATTRIBUTE_TRANSACTION_ID = "TransactionId";
+    public static final String DDB_ORDER_ATTRIBUTE_CREATED_AT = "createdAt";
 
-    public static final String ORDER_DDB_ATTRIBUTE_CREATED_AT= "CreatedAt";
+    public static final String DDB_ATTRIBUTE_INDEX_BUYER_ID_TO_CREATED_AT = String.format("%s-%s-index",
+            DDB_ORDER__ATTRIBUTE_BUYER_ID, DDB_ORDER_ATTRIBUTE_CREATED_AT);
 
-    public static final String ORDER_DDB_ATTRIBUTE_UPDATED_AT= "UpdatedAt";
-
-    public static final String ORDER_DDB_INDEX_BUYER_2_ORDERID = "Buyer-index";
+    public static final String DDB_ATTRIBUTE_INDEX_SELLER_ID_TO_CREATED_AT = String.format("%s-%s-index",
+            DDB_ORDER_ATTRIBUTE_SELLER_ID, DDB_ORDER_ATTRIBUTE_CREATED_AT);
 }
