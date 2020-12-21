@@ -4,7 +4,7 @@ public class OrgConfig {
 
     public static final String ORG_DDB_TABLE_NAME = "Organization";
 
-    public static final String ORG_DDB_ATTRIBUTE_NAME = "OrgId";
+    public static final String ORG_DDB_KEY_ORGNAME = "OrgId";
 
     public static final String ORG_DDB_ATTRIBUTE_DESCRIPTION = "Description";
 

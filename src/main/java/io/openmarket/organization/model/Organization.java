@@ -18,7 +18,7 @@ import static io.openmarket.config.OrgConfig.*;
 public class Organization {
     @NonNull
     @DynamoDBHashKey
-    @DynamoDBAttribute(attributeName = ORG_DDB_ATTRIBUTE_NAME)
+    @DynamoDBAttribute(attributeName = ORG_DDB_KEY_ORGNAME)
     private String orgName;
 
     @DynamoDBAttribute(attributeName = ORG_DDB_ATTRIBUTE_EVENTS)
@@ -42,6 +42,7 @@ public class Organization {
     @DynamoDBAttribute(attributeName = ORG_DDB_ATTRIBUTE_OWNER_ID)
     private String orgOwnerId;
 
+    @Nonnull
     @DynamoDBAttribute(attributeName = ORG_DDB_ATTRIBUTE_CURRENCY)
     private String orgCurrency;
 

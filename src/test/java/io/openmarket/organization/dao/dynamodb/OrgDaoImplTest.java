@@ -1,7 +1,6 @@
 package io.openmarket.organization.dao.dynamodb;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
 import com.amazonaws.services.dynamodbv2.local.shared.access.AmazonDynamoDBLocal;
@@ -13,10 +12,8 @@ import io.openmarket.organization.model.Organization;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.*;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static io.openmarket.config.OrgConfig.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -116,8 +113,8 @@ public class OrgDaoImplTest {
 
     private static void createTable() {
         dbClient.createTable(new CreateTableRequest().withTableName(ORG_DDB_TABLE_NAME)
-                .withKeySchema(ImmutableList.of(new KeySchemaElement(ORG_DDB_ATTRIBUTE_NAME, KeyType.HASH)))
-                .withAttributeDefinitions(ImmutableList.of(new AttributeDefinition(ORG_DDB_ATTRIBUTE_NAME, ScalarAttributeType.S)))
+                .withKeySchema(ImmutableList.of(new KeySchemaElement(ORG_DDB_KEY_ORGNAME, KeyType.HASH)))
+                .withAttributeDefinitions(ImmutableList.of(new AttributeDefinition(ORG_DDB_KEY_ORGNAME, ScalarAttributeType.S)))
                 .withProvisionedThroughput(new ProvisionedThroughput(5L, 5L)));
     }
 }
