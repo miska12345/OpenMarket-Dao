@@ -80,9 +80,11 @@ public class OrderDaoImplTest {
         assertTrue(opOrder.isPresent());
 
         Order testOrder = opOrder.get();
+        System.out.println(testOrder);
         assertEquals(testOrder.getBuyer(), order.getBuyer());
         assertEquals(testOrder.getSeller(), order.getSeller());
         assertEquals(testOrder.getOrderId(), order.getOrderId());
+        assertTrue(testOrder.getItem_summary().size() == 2);
         assertTrue(testOrder.getItem_summary().containsAll(order.getItem_summary()));
         assertEquals(testOrder.getDelivery_address(), order.getDelivery_address());
         assertEquals(testOrder.getTotal(), order.getTotal());
