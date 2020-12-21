@@ -40,10 +40,15 @@ public class ItemDaoImpl extends AbstractMySQLDao implements ItemDao {
                 int id = rs.getInt("itemID");
                 result.add(id);
             }
+            getItemIDByOrgID.close();
         } catch (SQLException e) {
             log.error("Failed to get items for orgId {}", orgId, e);
         }
         return result;
+    }
+
+    public void batchUpdate(@Nonnull final Collection<Integer> itemIds, @Nonnull List<Integer> updateColumn, @Nonnull List<Item> updated) {
+
     }
 
     public List<Item> batchLoad(@Nonnull final Collection<Integer> itemIds) {
@@ -59,14 +64,38 @@ public class ItemDaoImpl extends AbstractMySQLDao implements ItemDao {
                 result.add(sqlResultToItem(rs));
                 rs.close();
             }
-
+            getItemByID.close();
         } catch (SQLException e) {
             log.error("Failed to batch load items {}", itemIds, e);
         }
         return result;
     }
 
-    private static Item sqlResultToItem(@NonNull final ResultSet rs) throws SQLException {
+    public List<Item> getAllItemsRankedByPurchasedCount(int limit, String category) {
+        List<Item> result = new ArrayList<>();
+        if (category.equals("any")) category = "%";
+        try {
+            PreparedStatement getIDRankedByCount = this.getSource().getConnection().prepareStatement(QueryStatements.GET_ITEM_RANKED_BY_COUNT);
+            getIDRankedByCount.setString(1, category);
+            getIDRankedByCount.setInt(2, limit);
+
+            ResultSet rs = getIDRankedByCount.executeQuery();
+            while (rs.next()) {
+                Item item = sqlResultToItem(rs);
+                result.add(item);
+            }
+
+            rs.close();
+            getIDRankedByCount.close();
+        } catch (Exception e) {
+
+            log.info("Error while getting items ranked by count with stack trace: \n '{}'", e.getStackTrace().toString());
+        }
+        return result;
+    }
+
+
+    public static Item sqlResultToItem(@NonNull final ResultSet rs) throws SQLException {
         return Item.builder().itemID(rs.getString("itemID"))
                 .itemName(rs.getString("itemName"))
                 .itemPrice(rs.getDouble("itemPrice"))
