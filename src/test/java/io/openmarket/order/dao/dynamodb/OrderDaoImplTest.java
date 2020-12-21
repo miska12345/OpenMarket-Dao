@@ -58,6 +58,7 @@ public class OrderDaoImplTest {
     private DynamoDBMapper dbMapper;
     private OrderDao orderDao;
 
+
     @BeforeAll
     public static void setupLocalDB() {
         localDBClient = DynamoDBEmbedded.create();

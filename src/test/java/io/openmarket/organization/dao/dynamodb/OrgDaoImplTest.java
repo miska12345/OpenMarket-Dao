@@ -1,6 +1,7 @@
 package io.openmarket.organization.dao.dynamodb;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
 import com.amazonaws.services.dynamodbv2.local.shared.access.AmazonDynamoDBLocal;
@@ -13,6 +14,7 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -48,12 +50,11 @@ public class OrgDaoImplTest {
     @Test
     public void when_SaveOrg_then_Exists_In_DB() {
         Organization org = Organization.builder()
-                .orgCurrencies(ImmutableSet.of("HELLO"))
+                .orgCurrency("HELLO")
                 .orgDescription("test")
                 .orgName("testOrg")
                 .orgOwnerId("owner1")
                 .orgPortraitS3Key("ldksjfasdo")
-                .orgSlogan("hello world")
                 .build();
         orgDao.save(org);
 
@@ -63,13 +64,18 @@ public class OrgDaoImplTest {
 
     @Test
     public void can_Load_Org_when_Exists() {
+        List<String> followers = ImmutableList.of("player1", "player2", "player3");
+        List<String> eventIDs = ImmutableList.of("Covid aware", "aware covid");
+        List<String> postersID = ImmutableList.of("Come get", "get Come");
         Organization org = Organization.builder()
-                .orgCurrencies(ImmutableSet.of("HELLO"))
+                .orgCurrency("HELLO")
                 .orgDescription("test")
                 .orgName("testOrg")
                 .orgOwnerId("owner1")
                 .orgPortraitS3Key("ldksjfasdo")
-                .orgSlogan("hello world")
+                .followerIDs(ImmutableSet.copyOf(followers))
+                .eventIDs(ImmutableSet.copyOf(eventIDs))
+                .postersID(ImmutableSet.copyOf(postersID))
                 .build();
         orgDao.save(org);
 
@@ -78,11 +84,22 @@ public class OrgDaoImplTest {
 
         Organization testOrg = opOrg.get();
         assertEquals(testOrg.getOrgName(), org.getOrgName());
-        assertTrue(testOrg.getOrgCurrencies().containsAll(org.getOrgCurrencies()));
+        assertEquals(testOrg.getOrgCurrency(), org.getOrgCurrency());
         assertEquals(testOrg.getOrgPortraitS3Key(), org.getOrgPortraitS3Key());
-        assertEquals(testOrg.getOrgSlogan(), org.getOrgSlogan());
         assertEquals(testOrg.getOrgOwnerId(), org.getOrgOwnerId());
         assertEquals(testOrg.getOrgDescription(), org.getOrgDescription());
+
+        int count = 0;
+        for (String follower : opOrg.get().getFollowerIDs()) {
+            assertEquals(follower, followers.get(count));
+            count++;
+        }
+        count = 0;
+        for (String eventID : opOrg.get().getEventIDs()) {
+            assertEquals(eventID, eventIDs.get(count));
+            count++;
+        }
+
     }
 
 
@@ -100,7 +117,7 @@ public class OrgDaoImplTest {
     private static void createTable() {
         dbClient.createTable(new CreateTableRequest().withTableName(ORG_DDB_TABLE_NAME)
                 .withKeySchema(ImmutableList.of(new KeySchemaElement(ORG_DDB_ATTRIBUTE_NAME, KeyType.HASH)))
-                .withAttributeDefinitions(new AttributeDefinition(ORG_DDB_ATTRIBUTE_NAME, ScalarAttributeType.S))
+                .withAttributeDefinitions(ImmutableList.of(new AttributeDefinition(ORG_DDB_ATTRIBUTE_NAME, ScalarAttributeType.S)))
                 .withProvisionedThroughput(new ProvisionedThroughput(5L, 5L)));
     }
 }
