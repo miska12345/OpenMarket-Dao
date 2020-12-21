@@ -76,6 +76,9 @@ public class DaoModule {
     ComboPooledDataSource provideComboPooledDataSource() {
         ComboPooledDataSource cpds = new ComboPooledDataSource();
         cpds.setJdbcUrl(System.getenv("DB_URL"));
+        System.out.println(System.getenv("DB_URL"));
+        System.out.println(System.getenv("DB_USER"));
+        System.out.println(System.getenv("DB_PASS"));
         cpds.setUser(System.getenv("DB_USER"));
         cpds.setPassword(System.getenv("DB_PASS"));
         cpds.setInitialPoolSize(5);
