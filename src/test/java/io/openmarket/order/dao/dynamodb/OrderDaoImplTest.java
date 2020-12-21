@@ -90,7 +90,7 @@ public class OrderDaoImplTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideTestGetOrderIdsByBuyerIdArgs")
+    @MethodSource("provideTestGetOrderIdsArgs")
     public void test_Can_Get_OrderIds_By_BuyerId(int numMyItems, int numOtherItems) {
         List<String> orderIds = new ArrayList<>();
         for (int i = 0; i < numMyItems + numOtherItems; i++) {
