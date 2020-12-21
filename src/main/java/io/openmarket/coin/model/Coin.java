@@ -29,5 +29,5 @@ public class Coin {
     private String icon;
 
     @DynamoDBAttribute(attributeName = COIN_DDB_ATTRIBUTE_NET)
-    private String netAmount;
+    private double netAmount;
 }
