@@ -88,8 +88,7 @@ public class ItemDaoImpl extends AbstractMySQLDao implements ItemDao {
             rs.close();
             getIDRankedByCount.close();
         } catch (Exception e) {
-
-            log.info("Error while getting items ranked by count with stack trace: \n '{}'", e.getStackTrace().toString());
+            log.error(e);
         }
         return result;
     }
