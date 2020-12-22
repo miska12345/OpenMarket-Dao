@@ -21,7 +21,6 @@ public class SNSDaoImpl implements  SNSDao {
     public SNSDaoImpl(@NonNull final AmazonSNS snsClient, @NonNull final Gson gson) {
         this.snsClient = snsClient;
         this.gson = gson;
-
     }
 
     @Override
