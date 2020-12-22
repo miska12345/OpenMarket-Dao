@@ -46,7 +46,7 @@ dependencies {
     implementation 'com.amazonaws:aws-java-sdk-s3'
     implementation 'com.amazonaws:aws-java-sdk-dynamodb'
     implementation 'com.amazonaws:aws-java-sdk-sqs'
-    implementation 'com.amazonaws:aws-java-sdk-ses'
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-sns', version: '1.9.3'
 
     implementation("com.google.guava:guava:29.0-jre")
     implementation 'com.google.code.gson:gson:2.8.6'

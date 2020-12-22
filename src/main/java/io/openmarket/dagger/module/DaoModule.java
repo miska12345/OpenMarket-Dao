@@ -1,9 +1,10 @@
 package io.openmarket.dagger.module;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sqs.AmazonSQS;
+import com.google.gson.Gson;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import dagger.Module;
 import dagger.Provides;
@@ -14,9 +15,10 @@ import io.openmarket.marketplace.dao.ItemDao;
 import io.openmarket.marketplace.dao.ItemDaoImpl;
 import io.openmarket.order.dao.OrderDao;
 import io.openmarket.order.dao.OrderDaoImpl;
-import io.openmarket.order.model.Order;
 import io.openmarket.organization.dao.OrgDao;
 import io.openmarket.organization.dao.OrgDaoImpl;
+import io.openmarket.sns.dao.SNSDao;
+import io.openmarket.sns.dao.SNSDaoImpl;
 import io.openmarket.stamp.dao.dynamodb.StampEventDao;
 import io.openmarket.stamp.dao.dynamodb.StampEventDaoImpl;
 import io.openmarket.transaction.dao.dynamodb.TransactionDao;
@@ -27,12 +29,8 @@ import io.openmarket.wallet.dao.dynamodb.WalletDao;
 import io.openmarket.wallet.dao.dynamodb.WalletDaoImpl;
 
 import javax.inject.Singleton;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
-@Module(includes = AWSModule.class)
+@Module(includes = {AWSModule.class, MiscModule.class})
 public class DaoModule {
     @Provides
     @Singleton
@@ -100,5 +98,11 @@ public class DaoModule {
     @Singleton
     SQSPublisher<TransactionTask> provideSQSTransactionPublisher(AmazonSQS sqsClient) {
         return new SQSTransactionTaskPublisher(sqsClient);
+    }
+
+    @Provides
+    @Singleton
+    SNSDao provideSNSDao(AmazonSNS snsClient, Gson gson) {
+        return new SNSDaoImpl(snsClient, gson);
     }
 }
