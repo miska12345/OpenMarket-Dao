@@ -2,6 +2,8 @@ package io.openmarket.dagger.module;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.sns.AmazonSNS;
+import com.amazonaws.services.sns.AmazonSNSClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import dagger.Module;
@@ -21,5 +23,11 @@ public class AWSModule {
     @Singleton
     AmazonSQS provideSQS() {
         return AmazonSQSClientBuilder.standard().build();
+    }
+
+    @Provides
+    @Singleton
+    AmazonSNS provideSNS() {
+        return AmazonSNSClientBuilder.standard().build();
     }
 }
