@@ -21,24 +21,13 @@ public class Organization {
     @DynamoDBAttribute(attributeName = ORG_DDB_KEY_ORGNAME)
     private String orgName;
 
-    @DynamoDBAttribute(attributeName = ORG_DDB_ATTRIBUTE_EVENTS)
-    private Set<String> eventIDs;
-
-    @DynamoDBAttribute(attributeName = ORG_DDB_ATTRIBUTE_POSTERS)
-    private Set<String> postersID;
-
-    @DynamoDBAttribute(attributeName = ORG_DDB_ATTRIBUTE_TAGS)
-    private Set<String> tags;
-
-    @DynamoDBAttribute(attributeName = ORG_DDB_ATTRIBUTE_FOLLOWERS)
-    private Set<String> followerIDs;
-
     @DynamoDBAttribute(attributeName = ORG_DDB_ATTRIBUTE_DESCRIPTION)
     private String orgDescription;
 
     @DynamoDBAttribute(attributeName = ORG_DDB_ATTRIBUTE_PORTRAIT_S3KEY)
     private String orgPortraitS3Key;
 
+    @Nonnull
     @DynamoDBAttribute(attributeName = ORG_DDB_ATTRIBUTE_OWNER_ID)
     private String orgOwnerId;
 
