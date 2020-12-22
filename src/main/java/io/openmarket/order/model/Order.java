@@ -53,4 +53,7 @@ public class Order {
     @DynamoDBTypeConvertedTimestamp
     @DynamoDBAttribute(attributeName = ORDER_DDB_ATTRIBUTE_CREATED_AT)
     private String createdAt;
+
+    @DynamoDBVersionAttribute
+    private Integer version;
 }
