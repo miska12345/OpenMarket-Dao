@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
 import com.amazonaws.services.dynamodbv2.local.shared.access.AmazonDynamoDBLocal;
 import com.amazonaws.services.dynamodbv2.model.*;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import io.openmarket.organization.dao.OrgDaoImpl;
 import io.openmarket.organization.model.Organization;
@@ -61,18 +62,12 @@ public class OrgDaoImplTest {
 
     @Test
     public void can_Load_Org_when_Exists() {
-        List<String> followers = ImmutableList.of("player1", "player2", "player3");
-        List<String> eventIDs = ImmutableList.of("Covid aware", "aware covid");
-        List<String> postersID = ImmutableList.of("Come get", "get Come");
         Organization org = Organization.builder()
                 .orgCurrency("HELLO")
                 .orgDescription("test")
                 .orgName("testOrg")
                 .orgOwnerId("owner1")
                 .orgPortraitS3Key("ldksjfasdo")
-                .followerIDs(ImmutableSet.copyOf(followers))
-                .eventIDs(ImmutableSet.copyOf(eventIDs))
-                .postersID(ImmutableSet.copyOf(postersID))
                 .build();
         orgDao.save(org);
 
@@ -86,17 +81,64 @@ public class OrgDaoImplTest {
         assertEquals(testOrg.getOrgOwnerId(), org.getOrgOwnerId());
         assertEquals(testOrg.getOrgDescription(), org.getOrgDescription());
 
-        int count = 0;
-        for (String follower : opOrg.get().getFollowerIDs()) {
-            assertEquals(follower, followers.get(count));
-            count++;
-        }
-        count = 0;
-        for (String eventID : opOrg.get().getEventIDs()) {
-            assertEquals(eventID, eventIDs.get(count));
-            count++;
-        }
+    }
 
+    @Test
+    public void can_not_update() {
+
+    }
+
+    @Test
+    public void can_update() {
+        List<String> followers = ImmutableList.of("player1", "player2", "player3");
+        List<String> eventIDs = ImmutableList.of("Covid aware", "aware covid");
+        List<String> postersID = ImmutableList.of("Come get", "get Come");
+        Organization org = Organization.builder()
+                .orgCurrency("HELLO")
+                .orgDescription("test")
+                .orgName("testOrg")
+                .orgOwnerId("owner1")
+                .orgPortraitS3Key("ldksjfasdo")
+                .build();
+        orgDao.save(org);
+
+        UpdateItemRequest request = new UpdateItemRequest()
+                .withTableName(ORG_DDB_TABLE_NAME)
+                .withKey(ImmutableMap.of(ORG_DDB_KEY_ORGNAME, new AttributeValue("testOrg")))
+                .withUpdateExpression("ADD #posterCol :newIds")
+                .withConditionExpression("not(contains(#posterCol, :newIds))")
+                .withExpressionAttributeNames(ImmutableMap.of("#posterCol", ORG_DDB_ATTRIBUTE_POSTERS))
+                .withExpressionAttributeValues(ImmutableMap.of(":newIds", new AttributeValue().withSS("organization of bubble tea")));
+
+        this.orgDao.updateOrg(request);
+
+        List<String> result = orgDao.getPosterIds("testOrg");
+        for (String res : result) {
+            assertEquals(res, "organization of bubble tea");
+        }
+    }
+
+    @Test
+    public void cannot_update_when_poster_is_there() {
+        Organization org = Organization.builder()
+                .orgCurrency("HELLO")
+                .orgDescription("test")
+                .orgName("testOrg")
+                .orgOwnerId("owner1")
+                .orgPortraitS3Key("ldksjfasdo")
+                .build();
+        orgDao.save(org);
+
+        UpdateItemRequest request = new UpdateItemRequest()
+                .withTableName(ORG_DDB_TABLE_NAME)
+                .withKey(ImmutableMap.of(ORG_DDB_KEY_ORGNAME, new AttributeValue("testOrg")))
+                .withUpdateExpression("ADD #posterCol :newIds")
+                .withConditionExpression("not(contains(#posterCol, :newIds))")
+                .withExpressionAttributeNames(ImmutableMap.of("#posterCol", ORG_DDB_ATTRIBUTE_POSTERS))
+                .withExpressionAttributeValues(ImmutableMap.of(":newIds", new AttributeValue().withSS("organization of bubble tea")));
+        this.orgDao.updateOrg(request);
+
+        assertEquals(this.orgDao.getPosterIds("testOrg").size(), 1);
     }
 
 
