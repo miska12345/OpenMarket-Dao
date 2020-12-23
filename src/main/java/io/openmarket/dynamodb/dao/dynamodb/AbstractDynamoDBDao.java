@@ -2,6 +2,7 @@ package io.openmarket.dynamodb.dao.dynamodb;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.model.DeleteItemRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -35,6 +36,10 @@ public abstract class AbstractDynamoDBDao<T> implements DynamoDBDao<T> {
         }
         dbMapper.save(obj);
         log.info("Successfully saved object 'g{}' to DynamoDB", obj);
+    }
+
+    public void delete(final T obj) {
+        dbMapper.delete(obj);
     }
 
     protected abstract boolean validate(final T obj);

@@ -49,7 +49,7 @@ public class OrderDaoImplTest {
     private static final ItemInfo ITEM_CUP = ItemInfo.builder()
             .quantity(1)
             .itemName("Cup")
-            .itemId("123")
+            .itemId(1)
             .price(10.0)
             .build();
 

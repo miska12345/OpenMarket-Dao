@@ -12,14 +12,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ItemInfo {
     @SerializedName("itemId")
-    private String itemId;
+    @Builder.Default
+    private int itemId = -1;
 
     @SerializedName("itemName")
-    private String itemName;
+    @Builder.Default
+    private String itemName = "";
 
     @SerializedName("price")
-    private double price;
+    @Builder.Default
+    private double price = 0.0;
 
     @SerializedName("quantity")
-    private int quantity;
+    @Builder.Default
+    private int quantity = 0;
 }

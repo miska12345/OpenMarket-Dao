@@ -95,7 +95,7 @@ public class ItemDaoImpl extends AbstractMySQLDao implements ItemDao {
 
 
     public static Item sqlResultToItem(@NonNull final ResultSet rs) throws SQLException {
-        return Item.builder().itemID(rs.getString("itemID"))
+        return Item.builder().itemID(rs.getInt("itemID"))
                 .itemName(rs.getString("itemName"))
                 .itemPrice(rs.getDouble("itemPrice"))
                 .itemCategory(rs.getString("itemCategory"))

@@ -19,4 +19,10 @@ public interface DynamoDBDao<T> {
      * @param obj the obj to upload.
      */
     void save(T obj);
+
+    /**
+     * Delete the given object from DDB.
+     * @param obj the object to delete.
+     */
+    void delete(T obj);
 }
