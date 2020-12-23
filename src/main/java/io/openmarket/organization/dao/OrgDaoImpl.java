@@ -44,7 +44,7 @@ public class OrgDaoImpl extends AbstractDynamoDBDao<Organization> implements Org
         return this.getDbClient().updateItem(request);
     }
 
-    public QueryResult query(QueryRequest request) {
+    public QueryResult queryOrg(QueryRequest request) {
         return this.getDbClient().query(request);
     }
 

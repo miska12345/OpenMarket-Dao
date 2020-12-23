@@ -51,7 +51,7 @@ public class ItemDaoImpl extends AbstractMySQLDao implements ItemDao {
 
     }
 
-    public List<Item> batchLoad(@Nonnull final Collection<Integer> itemIds) {
+    public List<Item> batchLoad(@Nonnull final Collection<Integer> itemIds, @NonNull final Collection<Integer> failedItemIds) {
         final List<Item> result = new ArrayList<>();
         try {
             ResultSet rs;
@@ -60,7 +60,10 @@ public class ItemDaoImpl extends AbstractMySQLDao implements ItemDao {
             for (Integer id : itemIds) {
                 getItemByID.setInt(1, id);
                 rs = getItemByID.executeQuery();
-                if (!rs.next()) continue;
+                if (!rs.next()) {
+                    failedItemIds.add(id);
+                    continue;
+                }
                 result.add(sqlResultToItem(rs));
                 rs.close();
             }

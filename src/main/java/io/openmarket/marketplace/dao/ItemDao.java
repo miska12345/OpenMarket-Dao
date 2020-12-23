@@ -13,14 +13,15 @@ public interface ItemDao {
      * @return a List containing item IDs owned by the organization,
      *  or empty list if 1) organization doesn't own any items, 2) failed to fetch from database.
      */
-    List<Integer> getItemIdsByOrg(@Nonnull final String orgId);
+    List<Integer> getItemIdsByOrg(String orgId);
 
     /**
      * Batch load items for the given list of ItemIDs.
      * @param itemIds a collection of item IDs to load.
+     * @param failedIds a collection to store itemIds that failed to fetch.
      * @return a list of items.
      */
-    List<Item> batchLoad(@Nonnull final Collection<Integer> itemIds);
+    List<Item> batchLoad(Collection<Integer> itemIds, Collection<Integer> failedIds);
 
     /**
      * Get all items sorted by purchasedCount descendingly
