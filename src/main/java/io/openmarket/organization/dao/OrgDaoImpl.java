@@ -44,7 +44,9 @@ public class OrgDaoImpl extends AbstractDynamoDBDao<Organization> implements Org
         return this.getDbClient().updateItem(request);
     }
 
-
+    public QueryResult queryOrg(QueryRequest request) {
+        return this.getDbClient().query(request);
+    }
 
     public List<String> getFollowerIds(String orgId) {
         final Map<String,String> KEY = ImmutableMap.of("#col", ORG_DDB_KEY_ORGNAME);

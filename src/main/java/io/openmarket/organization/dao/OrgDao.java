@@ -1,5 +1,7 @@
 package io.openmarket.organization.dao;
 
+import com.amazonaws.services.dynamodbv2.model.QueryRequest;
+import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import com.amazonaws.services.dynamodbv2.model.UpdateItemRequest;
 import com.amazonaws.services.dynamodbv2.model.UpdateItemResult;
 import io.openmarket.dynamodb.dao.dynamodb.DynamoDBDao;
@@ -12,4 +14,5 @@ public interface OrgDao extends DynamoDBDao<Organization> {
     Optional<Organization> getOrganization(String orgName, String projection);
     UpdateItemResult updateOrg(UpdateItemRequest request);
     List<String> getFollowerIds(String orgId);
+    QueryResult queryOrg(QueryRequest request);
 }
