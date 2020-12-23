@@ -28,4 +28,6 @@ public class OrgConfig {
 
     public static final String ORG_DDB_ATTRIBUTE_POSTERS3KEY = "POSTERS3KEY";
 
+    public static final String ORG_DDB_ATTRIBUTE_FOLLOWERS_COUNT = "FollowersCount";
+
 }

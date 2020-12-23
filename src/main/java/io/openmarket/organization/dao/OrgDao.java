@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface OrgDao extends DynamoDBDao<Organization> {
     Optional<Organization> getOrganization(String orgName, String projection);
     UpdateItemResult updateOrg(UpdateItemRequest request);
-    List<String> getPosterIds(String orgId);
+    List<String> getFollowerIds(String orgId);
 }

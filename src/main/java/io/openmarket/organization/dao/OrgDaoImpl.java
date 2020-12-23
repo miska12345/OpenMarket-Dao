@@ -29,6 +29,7 @@ public class OrgDaoImpl extends AbstractDynamoDBDao<Organization> implements Org
         super(dbClient, dbMapper);
     }
 
+    //TODO look into this method later
     @Override
     public Optional<Organization> getOrganization(String orgName, String projection) {
         return Optional.empty();
@@ -44,21 +45,23 @@ public class OrgDaoImpl extends AbstractDynamoDBDao<Organization> implements Org
     }
 
 
-    public List<String> getPosterIds(String orgId) {
+
+    public List<String> getFollowerIds(String orgId) {
         final Map<String,String> KEY = ImmutableMap.of("#col", ORG_DDB_KEY_ORGNAME);
         final Map<String, AttributeValue> VAL = ImmutableMap.of(":id", new AttributeValue(orgId));
         QueryRequest getPosters = new QueryRequest().withTableName(ORG_DDB_TABLE_NAME)
                 .withExpressionAttributeNames(KEY)
                 .withExpressionAttributeValues(VAL)
                 .withKeyConditionExpression("#col = :id")
-                .withProjectionExpression(ORG_DDB_ATTRIBUTE_POSTERS);
+                .withProjectionExpression(ORG_DDB_ATTRIBUTE_FOLLOWERS);
         QueryResult queryRS = this.getDbClient().query(getPosters);
-        return queryRS.getItems().get(0).get(ORG_DDB_ATTRIBUTE_POSTERS).getSS();
+        return queryRS.getItems().get(0).get(ORG_DDB_ATTRIBUTE_FOLLOWERS).getSS();
     }
 
     @Override
     protected boolean validate(Organization obj) {
         if (obj.getOrgName() == null) return false;
+
 
         return true;
     }
