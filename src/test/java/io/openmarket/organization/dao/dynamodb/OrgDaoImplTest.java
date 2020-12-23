@@ -85,66 +85,6 @@ public class OrgDaoImplTest {
 
     }
 
-    @Test
-    public void can_not_update() {
-
-    }
-
-    @Test
-    public void can_update() {
-        List<String> followers = ImmutableList.of("player1", "player2", "player3");
-        List<String> eventIDs = ImmutableList.of("Covid aware", "aware covid");
-        List<String> postersID = ImmutableList.of("Come get", "get Come");
-        Organization org = Organization.builder()
-                .orgCurrency("HELLO")
-                .orgDescription("test")
-                .orgName("testOrg")
-                .orgOwnerId("owner1")
-                .orgPortraitS3Key("ldksjfasdo")
-                .orgPosterS3Key("不讲武德")
-                .build();
-        orgDao.save(org);
-
-        UpdateItemRequest request = new UpdateItemRequest()
-                .withTableName(ORG_DDB_TABLE_NAME)
-                .withKey(ImmutableMap.of(ORG_DDB_KEY_ORGNAME, new AttributeValue("testOrg")))
-                .withUpdateExpression("ADD #posterCol :newIds")
-                .withConditionExpression("not(contains(#posterCol, :newIds))")
-                .withExpressionAttributeNames(ImmutableMap.of("#posterCol", ORG_DDB_ATTRIBUTE_POSTERS))
-                .withExpressionAttributeValues(ImmutableMap.of(":newIds", new AttributeValue().withSS("organization of bubble tea")));
-
-        this.orgDao.updateOrg(request);
-
-        List<String> result = orgDao.getPosterIds("testOrg");
-        for (String res : result) {
-            assertEquals(res, "organization of bubble tea");
-        }
-    }
-
-    @Test
-    public void cannot_update_when_poster_is_there() {
-        Organization org = Organization.builder()
-                .orgCurrency("HELLO")
-                .orgDescription("test")
-                .orgName("testOrg")
-                .orgOwnerId("owner1")
-                .orgPortraitS3Key("ldksjfasdo")
-                .orgPosterS3Key("不讲武德")
-                .build();
-        orgDao.save(org);
-
-        UpdateItemRequest request = new UpdateItemRequest()
-                .withTableName(ORG_DDB_TABLE_NAME)
-                .withKey(ImmutableMap.of(ORG_DDB_KEY_ORGNAME, new AttributeValue("testOrg")))
-                .withUpdateExpression("ADD #posterCol :newIds")
-                .withConditionExpression("not(contains(#posterCol, :newIds))")
-                .withExpressionAttributeNames(ImmutableMap.of("#posterCol", ORG_DDB_ATTRIBUTE_POSTERS))
-                .withExpressionAttributeValues(ImmutableMap.of(":newIds", new AttributeValue().withSS("organization of bubble tea")));
-        this.orgDao.updateOrg(request);
-
-        assertEquals(this.orgDao.getPosterIds("testOrg").size(), 1);
-    }
-
 
     @Test
     public void cannot_Load_If_Not_Exists() {
