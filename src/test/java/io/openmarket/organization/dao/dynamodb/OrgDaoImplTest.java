@@ -53,6 +53,7 @@ public class OrgDaoImplTest {
                 .orgName("testOrg")
                 .orgOwnerId("owner1")
                 .orgPortraitS3Key("ldksjfasdo")
+                .orgPosterS3Key("不讲武德")
                 .build();
         orgDao.save(org);
 
@@ -68,6 +69,7 @@ public class OrgDaoImplTest {
                 .orgName("testOrg")
                 .orgOwnerId("owner1")
                 .orgPortraitS3Key("ldksjfasdo")
+                .orgPosterS3Key("不讲武德")
                 .build();
         orgDao.save(org);
 
@@ -99,6 +101,7 @@ public class OrgDaoImplTest {
                 .orgName("testOrg")
                 .orgOwnerId("owner1")
                 .orgPortraitS3Key("ldksjfasdo")
+                .orgPosterS3Key("不讲武德")
                 .build();
         orgDao.save(org);
 
@@ -126,6 +129,7 @@ public class OrgDaoImplTest {
                 .orgName("testOrg")
                 .orgOwnerId("owner1")
                 .orgPortraitS3Key("ldksjfasdo")
+                .orgPosterS3Key("不讲武德")
                 .build();
         orgDao.save(org);
 

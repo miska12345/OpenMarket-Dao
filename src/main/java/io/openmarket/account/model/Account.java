@@ -53,4 +53,6 @@ public class Account {
     @DynamoDBAttribute(attributeName = USER_DDB_ATTRIBUTE_LASTUPDATEDAT)
     private Date lastUpdatedAt;
 
+
+    //TODO add the list of organization that it belongs to
 }
