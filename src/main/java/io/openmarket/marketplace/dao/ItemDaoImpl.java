@@ -51,7 +51,8 @@ public class ItemDaoImpl extends AbstractMySQLDao implements ItemDao {
 
     }
 
-    public List<Item> batchLoad(@Nonnull final Collection<Integer> itemIds, @NonNull final Collection<Integer> failedItemIds) {
+    public List<Item> batchLoad(@Nonnull final Collection<Integer> itemIds,
+                                @NonNull final Collection<Integer> failedItemIds) {
         final List<Item> result = new ArrayList<>();
         try {
             ResultSet rs;
@@ -70,6 +71,7 @@ public class ItemDaoImpl extends AbstractMySQLDao implements ItemDao {
             getItemByID.close();
         } catch (SQLException e) {
             log.error("Failed to batch load items {}", itemIds, e);
+            throw new IllegalStateException("Failed to execute database queries, batch load aborted");
         }
         return result;
     }

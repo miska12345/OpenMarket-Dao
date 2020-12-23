@@ -67,7 +67,7 @@ dependencies {
     runtime "mysql:mysql-connector-java:8.0.15"
 
     // c3p0
-    compile group: 'c3p0', name: 'c3p0', version: '0.9.0.4'
+    compile group: 'c3p0', name: 'c3p0', version: '0.9.1.2'
 
 }
 
