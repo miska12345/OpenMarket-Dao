@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ItemDaoImplTest {
     private static ComboPooledDataSource cpds;
@@ -55,16 +56,26 @@ public class ItemDaoImplTest {
     @Test
     public void testBatchLoad_When_Items_Exist() throws SQLException {
         ItemDao itemDao = new ItemDaoImpl(cpds);
+        List<Integer> failedItemIds = new ArrayList<>();
         Statement statement = cpds.getConnection().createStatement();
         statement.execute(QueryStatements.INSERT_ITEM);
         statement.execute(QueryStatements.INSERT_ITEM);
         statement.execute(QueryStatements.INSERT_ITEM);
-        List<Item> items = itemDao.batchLoad(ImmutableList.of(1,2,3));
+        List<Item> items = itemDao.batchLoad(ImmutableList.of(1,2,3), failedItemIds);
+        assertTrue(failedItemIds.isEmpty());
         int count = 1;
         for (Item item : items) {
             assertEquals(item.getItemID(), count);
             count++;
         }
+    }
+
+    @Test
+    public void testBatchLoad_When_Item_Not_Exists() {
+        List<Integer> failedItemIds = new ArrayList<>();
+        ItemDao itemDao = new ItemDaoImpl(cpds);
+        List<Item> items = itemDao.batchLoad(ImmutableList.of(1,2,3), failedItemIds);
+        assertEquals(3, failedItemIds.size());
     }
 
     @Test
