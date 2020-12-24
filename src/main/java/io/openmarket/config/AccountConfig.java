@@ -62,5 +62,7 @@ public class AccountConfig {
      * The DDB config for enabling the credential verification
      */
 
+    public static final String USER_DDB_ATTRIBUTE_FOLLOWING = "allFollowing";
+
     public static final boolean TOKEN_VERIFICATION_ENABLE = false;
 }
