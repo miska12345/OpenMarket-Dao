@@ -10,6 +10,7 @@ import org.hibernate.query.Query;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,16 +41,19 @@ public class ItemDaoImpl extends AbstractMySQLDao<Item> implements ItemDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Item> batchLoad(List<Integer> itemIds, Collection<Integer> failedIds) {
+    public List<Item> batchLoad(Collection<Integer> itemIds, Collection<Integer> failedIds) {
         final String queryPart = " itemID = %d";
         final String joiner = " OR ";
         final StringBuilder sb = new StringBuilder("SELECT i from Item i WHERE");
-        for (int i = 0; i < itemIds.size(); i++) {
-            int id = itemIds.get(i);
-            if (i > 0) {
+        final Iterator<Integer> iter = itemIds.iterator();
+        boolean isFirst = true;
+        while (iter.hasNext()) {
+            if (!isFirst) {
                 sb.append(joiner);
+            } else {
+                isFirst = false;
             }
-            sb.append(String.format(queryPart, id));
+            sb.append(String.format(queryPart, iter.next()));
         }
         final Session session = getSessionFactory().openSession();
         final Query query = session.createQuery(sb.toString());

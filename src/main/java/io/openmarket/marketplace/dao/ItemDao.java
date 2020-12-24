@@ -22,7 +22,7 @@ public interface ItemDao extends SQLDao<Item> {
      * @param failedIds a collection to store itemIds that failed to fetch.
      * @return a list of items.
      */
-    List<Item> batchLoad(List<Integer> itemIds, Collection<Integer> failedIds);
+    List<Item> batchLoad(Collection<Integer> itemIds, Collection<Integer> failedIds);
 
     /**
      * Get all items sorted by purchasedCount descendingly
