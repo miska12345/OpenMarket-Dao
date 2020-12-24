@@ -27,6 +27,7 @@ import io.openmarket.transaction.dao.sqs.SQSTransactionTaskPublisher;
 import io.openmarket.transaction.model.TransactionTask;
 import io.openmarket.wallet.dao.dynamodb.WalletDao;
 import io.openmarket.wallet.dao.dynamodb.WalletDaoImpl;
+import org.hibernate.SessionFactory;
 
 import javax.inject.Singleton;
 
@@ -65,27 +66,8 @@ public class DaoModule {
 
     @Provides
     @Singleton
-    ItemDao provideItemDao(ComboPooledDataSource source){
+    ItemDao provideItemDao(SessionFactory source){
         return new ItemDaoImpl(source);
-    }
-
-    @Provides
-    @Singleton
-    ComboPooledDataSource provideComboPooledDataSource() {
-        ComboPooledDataSource cpds = new ComboPooledDataSource();
-        cpds.setJdbcUrl(System.getenv("DB_URL"));
-        System.out.println(System.getenv("DB_URL"));
-        System.out.println(System.getenv("DB_USER"));
-        System.out.println(System.getenv("DB_PASS"));
-        cpds.setUser(System.getenv("DB_USER"));
-        cpds.setPassword(System.getenv("DB_PASS"));
-        cpds.setInitialPoolSize(5);
-        cpds.setMinPoolSize(5);
-        cpds.setAcquireIncrement(5);
-        cpds.setMaxPoolSize(20);
-        cpds.setMaxStatements(100);
-
-        return cpds;
     }
 
     @Provides

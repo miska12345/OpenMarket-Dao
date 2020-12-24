@@ -1,12 +1,13 @@
 package io.openmarket.marketplace.dao;
 
 import io.openmarket.marketplace.model.Item;
+import io.openmarket.mysql.dao.SQLDao;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
-public interface ItemDao {
+public interface ItemDao extends SQLDao<Item> {
     /**
      * Get a list of all items owned by the given organization.
      * @param orgId the ID of the organization.
@@ -31,10 +32,9 @@ public interface ItemDao {
     List<Item> getAllItemsRankedByPurchasedCount(int limit, String category);
 
     /**
-     * Batch update the item by comparing updated and the one retrieved from itemids
-     * @param itemIds item ids that need to be updated
-     * @param updateColumn list of int of column index that needs to be update
-     * @param updated   list of updated item
+     * Update item stock and purchaseCount according to the given map of itemId to stock change.
+     * @param itemsToUpdate a {@link List} itemIds that failed to update.
+     * @throws IllegalStateException if database cannot be reached.
      */
-    void batchUpdate(@Nonnull final Collection<Integer> itemIds, List<Integer> updateColumn, List<Item> updated);
+    List<Integer> updateItemStock(Map<Integer, Integer> itemsToUpdate);
 }

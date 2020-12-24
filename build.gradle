@@ -66,8 +66,13 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.15'
     runtime "mysql:mysql-connector-java:8.0.15"
 
-    // c3p0
-    compile group: 'c3p0', name: 'c3p0', version: '0.9.0.4'
+//    compile group: 'org.hibernate', name: 'hibernate-gradle-plugin', version: '5.4.26.Final'
+    // https://mvnrepository.com/artifact/org.hibernate/hibernate-c3p0
+    compile group: 'org.hibernate', name: 'hibernate-c3p0', version: '5.4.26.Final'
+
+    // https://mvnrepository.com/artifact/com.wix/wix-embedded-mysql
+    testCompile group: 'com.wix', name: 'wix-embedded-mysql', version: '4.6.1'
+
 
 }
 
