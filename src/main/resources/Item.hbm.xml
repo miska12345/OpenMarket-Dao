@@ -1,0 +1,28 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name = "io.openmarket.marketplace.model.Item" table = "ITEMS">
+
+        <meta attribute = "class-description">
+            This class contains the item detail.
+        </meta>
+
+        <id name = "itemID" type = "int" column = "itemID">
+            <generator class="native"/>
+        </id>
+
+        <property name = "itemName" column = "itemName" type = "string"/>
+        <property name = "belongTo" column = "belongTo" type = "string"/>
+        <property name = "stock" column = "stock" type = "int"/>
+        <property name = "purchasedCount" column = "purchasedCount" type = "int"/>
+        <property name = "itemPrice" column = "itemPrice" type = "double"/>
+        <property name = "itemDescription" column = "itemDescription" type = "string"/>
+        <property name = "itemImageLink" column = "itemImageLink" type = "string"/>
+        <property name = "itemCategory" column = "itemCategory" type = "string"/>
+        <property name = "itemTag" column = "itemTag" type = "int"/>
+        <property name = "showMarket" column = "showMarket" type = "boolean"/>
+    </class>
+</hibernate-mapping>

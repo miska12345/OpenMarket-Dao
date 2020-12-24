@@ -5,13 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.Id;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicUpdate
 public class Item {
     @Builder.Default
+    @Id
     private int itemID = -1;
 
     @Builder.Default
@@ -42,4 +47,10 @@ public class Item {
     @Builder.Default
     @NonNull
     private String itemCategory = "";
+
+    @Builder.Default
+    private int itemTag = -1;
+
+    @Builder.Default
+    private boolean showMarket = true;
 }
