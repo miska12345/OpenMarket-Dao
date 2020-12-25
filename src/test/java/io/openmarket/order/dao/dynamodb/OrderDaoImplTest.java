@@ -5,6 +5,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
 import com.amazonaws.services.dynamodbv2.local.shared.access.AmazonDynamoDBLocal;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.GlobalSecondaryIndex;
 import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
@@ -30,8 +31,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static io.openmarket.config.OrderConfig.*;
@@ -98,7 +102,7 @@ public class OrderDaoImplTest {
             orderDao.save(generateOrder(String.valueOf(i), i < numMyItems ? BUYER_ID : BUYER_ID_2, SELLER_ID,
                     OrderStatus.PAYMENT_CONFIRMED));
         }
-        orderDao.getOrderByBuyer(BUYER_ID, null, orderIds);
+        orderDao.getOrderByBuyer(BUYER_ID, null, orderIds, 999);
         assertEquals(numMyItems, orderIds.size());
     }
 
@@ -119,8 +123,23 @@ public class OrderDaoImplTest {
             orderDao.save(generateOrder(String.valueOf(i), BUYER_ID, i < numMyItems ? SELLER_ID : SELLER_ID_2,
                     OrderStatus.PAYMENT_CONFIRMED));
         }
-        orderDao.getOrderBySeller(SELLER_ID, null, orderIds);
+        orderDao.getOrderBySeller(SELLER_ID, null, orderIds, 999);
         assertEquals(numMyItems, orderIds.size());
+    }
+
+    @Test
+    public void test_Get_Orders_Max_Count() {
+        Set<String> orderIds = new HashSet<>();
+        for (int i = 0; i < 10; i++) {
+            orderDao.save(generateOrder(String.valueOf(i), BUYER_ID, SELLER_ID,
+                    OrderStatus.PAYMENT_CONFIRMED));
+        }
+        Map<String, AttributeValue> key = orderDao.getOrderByBuyer(BUYER_ID, null, orderIds, 5);
+        assertEquals(5, orderIds.size());
+        assertNotNull(key);
+        key = orderDao.getOrderByBuyer(BUYER_ID, key, orderIds, 100);
+        assertNull(key);
+        assertEquals(10, orderIds.size());
     }
 
     @Test

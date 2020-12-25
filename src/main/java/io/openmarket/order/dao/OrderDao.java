@@ -18,7 +18,7 @@ public interface OrderDao extends DynamoDBDao<Order> {
      * @return a lastEvaluatedKey for paginated query.
      */
     Map<String, AttributeValue> getOrderByBuyer (String buyerId, Map<String,
-            AttributeValue> exclusiveStartKey, Collection<String> orderIds);
+            AttributeValue> exclusiveStartKey, Collection<String> orderIds, int maxCount);
 
     /**
      * Get order by sellerId.
@@ -28,7 +28,7 @@ public interface OrderDao extends DynamoDBDao<Order> {
      * @return a lastEvaluateKey for paginated query.
      */
     Map<String, AttributeValue> getOrderBySeller (String sellerId, Map<String,
-            AttributeValue> exclusiveStartKey, Collection<String> orderIds);
+            AttributeValue> exclusiveStartKey, Collection<String> orderIds, int maxCount);
 
     /**
      * Batch load the given orders by ID.

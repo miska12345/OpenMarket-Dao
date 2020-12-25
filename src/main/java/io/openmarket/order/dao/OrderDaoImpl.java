@@ -35,18 +35,18 @@ public class OrderDaoImpl extends AbstractDynamoDBDao<Order> implements OrderDao
     }
 
     public Map<String, AttributeValue> getOrderByBuyer (@NonNull final String buyerId, final Map<String,
-            AttributeValue> exclusiveStartKey, Collection<String> orderIds) {
-        return getOrderByID(buyerId, true, exclusiveStartKey, orderIds);
+            AttributeValue> exclusiveStartKey, Collection<String> orderIds, int maxCount) {
+        return getOrderByID(buyerId, true, exclusiveStartKey, orderIds, maxCount);
     }
 
     public Map<String, AttributeValue> getOrderBySeller (@NonNull final String sellerId, final Map<String,
-            AttributeValue> exclusiveStartKey, Collection<String> orderIds) {
-        return getOrderByID(sellerId, false, exclusiveStartKey, orderIds);
+            AttributeValue> exclusiveStartKey, Collection<String> orderIds, int maxCount) {
+        return getOrderByID(sellerId, false, exclusiveStartKey, orderIds, maxCount);
     }
 
-    public Map<String, AttributeValue> getOrderByID (@NonNull final String id, Boolean isBuyer,
+    private Map<String, AttributeValue> getOrderByID (@NonNull final String id, Boolean isBuyer,
                                                  final Map<String, AttributeValue> exclusiveStartKey,
-                                                 Collection<String> orderIds) {
+                                                 Collection<String> orderIds, int maxCount) {
         final QueryRequest request = new QueryRequest()
                 .withTableName(ORDER_DDB_TABLE_NAME)
                 .withIndexName(isBuyer ? ORDER_DDB_INDEX_BUYER_ID_TO_CREATED_AT : ORDER_DDB_INDEX_SELLER_ID_TO_CREATED_AT)
@@ -57,7 +57,8 @@ public class OrderDaoImpl extends AbstractDynamoDBDao<Order> implements OrderDao
                 .withExpressionAttributeValues(
                         ImmutableMap.of(":v", new AttributeValue(id))
                 )
-                .withExclusiveStartKey(exclusiveStartKey);
+                .withExclusiveStartKey(exclusiveStartKey)
+                .withLimit(maxCount);
         final QueryResult result = super.getDbClient().query(request);
         for (Map<String, AttributeValue> order : result.getItems()) {
             orderIds.add(order.get(ORDER_DDB_ATTRIBUTE_ORDER_ID).getS());
